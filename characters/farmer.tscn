@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://assets/characters/farmer_frames.tres" id="1_ksy66"]
+
+[node name="Farmer" type="Node2D" unique_id=1135219760]
+texture_filter = 1
+metadata/frame_size = Vector2i(48, 64)
+metadata/pivot = "feet"
+metadata/description = "Farmer in a sand djellaba, red tarbouche and yellow balgha. Visual resource only; no controller or collisions."
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1750628513]
+position = Vector2(-24, -62)
+sprite_frames = ExtResource("1_ksy66")
+animation = &"idle_down"
+centered = false
