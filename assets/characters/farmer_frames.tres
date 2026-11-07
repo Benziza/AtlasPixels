@@ -1,0 +1,171 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/farmer.png" id="1_4ydi5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wayko"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0dsx"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(0, 64, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2ld6"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(0, 128, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0xf0"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(0, 192, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mn6m6"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_srahh"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(96, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4upfi"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(144, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmw4l"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(48, 64, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lear4"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(96, 64, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gr80f"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(144, 64, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_er7tn"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(48, 128, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ds6ys"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(96, 128, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sw1l8"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(144, 128, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lt6j8"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(48, 192, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khg6n"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(96, 192, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uvo4q"]
+atlas = ExtResource("1_4ydi5")
+region = Rect2(144, 192, 48, 64)
+
+[resource]
+resource_name = "Moroccan Farmer"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wayko")
+}],
+"loop": 1,
+"name": &"idle_down",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t0dsx")
+}],
+"loop": 1,
+"name": &"idle_left",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2ld6")
+}],
+"loop": 1,
+"name": &"idle_right",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0xf0")
+}],
+"loop": 1,
+"name": &"idle_up",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mn6m6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_srahh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4upfi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_srahh")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmw4l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lear4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gr80f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lear4")
+}],
+"loop": 1,
+"name": &"walk_left",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_er7tn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ds6ys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sw1l8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ds6ys")
+}],
+"loop": 1,
+"name": &"walk_right",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lt6j8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khg6n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uvo4q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khg6n")
+}],
+"loop": 1,
+"name": &"walk_up",
+"speed": 7.0
+}]

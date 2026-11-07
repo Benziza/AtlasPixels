@@ -1,3 +1,7 @@
-[gd_scene format=3]
+[gd_scene load_steps=3 format=3]
 
-[node name="Main" type="Node2D"]
+[ext_resource type="PackedScene" path="res://maps/douar_farm_playable.tscn" id="1_farm"]
+[ext_resource type="Script" path="res://maps/farm_game.gd" id="2_game"]
+
+[node name="Main" instance=ExtResource("1_farm")]
+script = ExtResource("2_game")
