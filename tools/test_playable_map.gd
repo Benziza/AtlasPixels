@@ -84,6 +84,7 @@ func check_access() -> void:
 
 func run_tests() -> void:
 	farm = load("res://main.tscn").instantiate() as Node2D
+	farm.persistence_enabled = false
 	root.add_child(farm)
 	player = farm.get_node("DepthSort/Player") as CharacterBody2D
 	await settle(3)
