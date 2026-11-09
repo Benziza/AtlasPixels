@@ -1,5 +1,6 @@
 extends RefCounted
 ## Farming rules and versioned save data, independent of rendering and input.
+const Layout = preload("res://maps/world_layout.gd")
 const START_MINUTE := 6 * 60
 const END_MINUTE := 26 * 60
 const SECONDS_PER_TICK := 7.0
@@ -190,14 +191,14 @@ func restore(data: Variant) -> bool:
 	for value: Variant in pos:
 		if not (value is float or value is int) or not is_finite(float(value)):
 			return false
-	if pos[0] < 8 or pos[0] > 1272 or pos[1] < 16 or pos[1] > 896:
+	if pos[0] < 8 or pos[0] > Layout.FARM_SIZE.x - 8 or pos[1] < 16 or pos[1] > Layout.FARM_SIZE.y:
 		return false
 	var records: Variant = data.get("beds")
 	if not records is Array or records.size() != beds.size():
 		return false
 	var restored: Dictionary = {}
 	for record: Variant in records:
-		if not record is Dictionary or not whole(record.get("x"), 0, 39) or not whole(record.get("y"), 0, 27):
+		if not record is Dictionary or not whole(record.get("x"), 0, Layout.FARM_SIZE.x / Layout.TILE_SIZE - 1) or not whole(record.get("y"), 0, Layout.FARM_SIZE.y / Layout.TILE_SIZE - 1):
 			return false
 		var cell := Vector2i(int(record.x), int(record.y))
 		if not beds.has(cell) or restored.has(cell) or not record.get("watered") is bool:
