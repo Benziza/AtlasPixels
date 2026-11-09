@@ -216,7 +216,7 @@ func test_scene() -> void:
 	game.player.position = game.markers.farmhouse + Vector2(0, 24)
 	await settle(15)
 	await press(KEY_E)
-	expect(game.paused and game.hud.modal_detail.text.contains("growing crops"), "Door did not offer sleep / dry-crop warning")
+	expect(game.paused and game.hud.modal_detail.text.contains("باقي خاصو الما"), "Door did not offer sleep / dry-crop warning")
 	game.menu_action("sleep")
 	await settle(65)
 	expect(game.state.day == 2 and game.state.beds[Vector2i(16, 9)].growth == 1, "Sleep did not advance watered crop exactly once")

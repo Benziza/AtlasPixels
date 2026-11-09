@@ -31,6 +31,18 @@ var atlas: Texture2D
 var cached_selection := -1
 var toolbar_at_top := false
 
+class DarijaTooltip extends Label:
+	func _init(message: String) -> void:
+		text = message
+		language = "ar_MA"
+		text_direction = Control.TEXT_DIRECTION_RTL
+		horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		theme_type_variation = "TooltipLabel"
+
+class ToolButton extends Button:
+	func _make_custom_tooltip(for_text: String) -> Object:
+		return DarijaTooltip.new(for_text)
+
 class WaterGauge extends Control:
 	var value := 40.0
 	func _draw() -> void:
@@ -42,6 +54,8 @@ class WaterGauge extends Control:
 
 class PixelFrame extends Control:
 	var inset := false
+	func _make_custom_tooltip(for_text: String) -> Object:
+		return DarijaTooltip.new(for_text)
 	func _draw() -> void:
 		var rect := Rect2(Vector2.ZERO, size)
 		# Every edge is aligned to the same two-pixel grid as the game art.
@@ -108,7 +122,11 @@ func flat(fill: Color, border: Color, width: int = 2) -> StyleBoxFlat:
 
 func label(text: String, font_size: int = 24, light: bool = false) -> Label:
 	var item := Label.new()
+	item.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	item.text = text
+	item.language = "ar_MA"
+	item.text_direction = Control.TEXT_DIRECTION_RTL
+	item.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	item.add_theme_font_override("font", font)
 	item.add_theme_font_size_override("font_size", font_size)
 	item.add_theme_color_override("font_color", Color("fff1c4") if light else INK)
@@ -127,6 +145,7 @@ func anchor_rect(item: Control, preset: Control.LayoutPreset, rect: Rect2) -> vo
 
 func frame(parent: Node, rect: Rect2, inset: bool = false) -> Control:
 	var item := PixelFrame.new()
+	item.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	item.position = rect.position
 	item.size = rect.size
 	item.inset = inset
@@ -139,6 +158,7 @@ func icon(index: int, parent: Node, rect: Rect2) -> TextureRect:
 	image.atlas = atlas
 	image.region = Rect2((index % 4) * 48, (index / 4) * 48, 48, 48)
 	var item := TextureRect.new()
+	item.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	item.texture = image
 	item.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	item.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -157,8 +177,11 @@ func place_label(parent: Node, text: String, rect: Rect2, font_size: int = 24, l
 	return item
 
 func button(text: String, action: String = "") -> Button:
-	var item := Button.new()
+	var item := ToolButton.new()
+	item.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	item.text = text
+	item.language = "ar_MA"
+	item.text_direction = Control.TEXT_DIRECTION_RTL
 	item.custom_minimum_size.y = 46
 	item.add_theme_font_size_override("font_size", 24)
 	item.add_theme_color_override("font_color", INK)
@@ -176,11 +199,14 @@ func button(text: String, action: String = "") -> Button:
 func _ready() -> void:
 	layer = 20
 	atlas = load("res://assets/ui/icons.png")
-	font = load("res://assets/ui/pixelify-sans.ttf").duplicate()
-	font.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+	font = load("res://assets/ui/fonts/readex-pro.ttf").duplicate()
+	font.allow_system_fallback = false
+	font.antialiasing = TextServer.FONT_ANTIALIASING_GRAY
 	font.hinting = TextServer.HINTING_NONE
 	font.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
 	screen = Control.new()
+	# Keep the map-aligned HUD and hotkey slots in place; text itself reads RTL.
+	screen.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	screen.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -206,6 +232,7 @@ func _ready() -> void:
 	toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	day_fade = ColorRect.new()
+	day_fade.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	day_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	day_fade.color = Color(0.09, 0.08, 0.13, 0)
 	day_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -214,32 +241,36 @@ func _ready() -> void:
 func build_clock() -> void:
 	var clock := frame(screen, Rect2(0, 0, 240, 120))
 	anchor_rect(clock, Control.PRESET_TOP_RIGHT, Rect2(-258, 18, 240, 120))
-	clock.tooltip_text = "The day runs from 6:00 am to 2:00 am.\nSleep at your front door to start tomorrow."
+	clock.tooltip_text = tr("The day runs from 6:00 am to 2:00 am.\nSleep at your front door to start tomorrow.")
 	dial = DayDial.new()
+	dial.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	dial.position = Vector2(12, 16)
 	dial.size = Vector2(88, 88)
 	dial.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clock.add_child(dial)
 	frame(clock, Rect2(104, 10, 124, 34), true)
-	date_label = place_label(clock, "Mon. 1", Rect2(114, 12, 108, 30), 26)
+	date_label = place_label(clock, tr("Mon. 1"), Rect2(114, 12, 108, 30), 22)
 	frame(clock, Rect2(104, 46, 44, 26), true)
 	period_icon = icon(7, clock, Rect2(114, 46, 24, 24))
 	var day_badge := frame(clock, Rect2(152, 46, 76, 26), true)
-	place_label(day_badge, "Douar", Rect2(8, 0, 62, 26), 20)
+	place_label(day_badge, tr("Douar"), Rect2(8, 0, 62, 26), 20)
 	frame(clock, Rect2(104, 76, 124, 32), true)
-	clock_label = place_label(clock, "6:00 am", Rect2(114, 76, 108, 32), 26)
+	clock_label = place_label(clock, tr("6:00 am"), Rect2(114, 76, 108, 32), 24)
+	clock_label.text_direction = Control.TEXT_DIRECTION_LTR
+	clock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	var money := frame(screen, Rect2(0, 0, 216, 38))
 	anchor_rect(money, Control.PRESET_TOP_RIGHT, Rect2(-234, 142, 216, 38))
-	money.tooltip_text = "Coins\nSell your harvest at the hanout."
+	money.tooltip_text = tr("Coins\nSell your harvest at the hanout.")
 	icon(6, money, Rect2(10, 6, 24, 24))
-	money_label = place_label(money, "100", Rect2(42, 4, 160, 30), 28)
+	money_label = place_label(money, "100", Rect2(42, 4, 160, 30), 24)
 	money_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	money_label.add_theme_color_override("font_color", Color("a53423"))
 	var water := frame(screen, Rect2(0, 0, 178, 32))
 	anchor_rect(water, Control.PRESET_TOP_RIGHT, Rect2(-234, 184, 178, 32))
-	water.tooltip_text = "Watering can\nPress E at the well or saqya to refill."
+	water.tooltip_text = tr("Watering can\nPress E at the well or saqya to refill.")
 	icon(2, water, Rect2(6, 4, 24, 24))
 	water_meter = WaterGauge.new()
+	water_meter.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	water_meter.position = Vector2(36, 10)
 	water_meter.size = Vector2(126, 12)
 	water_meter.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -249,7 +280,7 @@ func build_clock() -> void:
 	var pause_button := button("II", "pause")
 	pause_button.custom_minimum_size = Vector2.ZERO
 	pause_button.focus_mode = Control.FOCUS_NONE
-	pause_button.tooltip_text = "Pause / help (Esc)"
+	pause_button.tooltip_text = tr("Pause / help (Esc)")
 	for style_name in ["normal", "hover", "pressed", "focus"]:
 		var style := pause_button.get_theme_stylebox(style_name).duplicate() as StyleBoxFlat
 		style.content_margin_left = 2
@@ -263,15 +294,16 @@ func build_clock() -> void:
 func build_toolbar() -> void:
 	toolbar = frame(screen, Rect2(0, 0, BAR_WIDTH, 80))
 	anchor_rect(toolbar, Control.PRESET_CENTER_BOTTOM, Rect2(-BAR_WIDTH / 2, -96, BAR_WIDTH, 80))
-	var tips := ["Mint seeds\n4 watered nights to grow.\nClick a bed or press Space to plant.", "Tomato seeds\n11 watered nights; regrows every 4.\nClick a bed or press Space to plant.", "Watering can\nWater a nearby bed once each day.\nE at the well / saqya refills the can.", "Harvest\nPick a ripe crop with Click, Space or E."]
+	var tips := [tr("Mint seeds\n4 watered nights to grow.\nClick a bed or press Space to plant."), tr("Tomato seeds\n11 watered nights; regrows every 4.\nClick a bed or press Space to plant."), tr("Watering can\nWater a nearby bed once each day.\nE at the well / saqya refills the can."), tr("Harvest\nPick a ripe crop with Click, Space or E.")]
 	for i in 12:
 		var slot := button("")
+		# Resolve inherited layout before setting fixed coordinates.
+		toolbar.add_child(slot)
+		slot.custom_minimum_size = Vector2.ZERO
 		slot.position = Vector2(12 + i * SLOT, 12)
 		slot.size = Vector2(SLOT, SLOT)
-		slot.custom_minimum_size = Vector2.ZERO
 		slot.focus_mode = Control.FOCUS_NONE
 		slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if i < 4 else Control.CURSOR_ARROW
-		toolbar.add_child(slot)
 		if i < 4:
 			slot.tooltip_text = tips[i]
 			slot.pressed.connect(func(): tool_selected.emit(i))
@@ -279,12 +311,13 @@ func build_toolbar() -> void:
 			icon(i, slot, Rect2(4, 4, 48, 48))
 			place_label(slot, str(i + 1), Rect2(4, -2, 16, 20), 16, true)
 		elif i < 6:
-			slot.tooltip_text = "Harvested mint - sell at the hanout" if i == 4 else "Harvested tomatoes - sell at the hanout"
+			slot.tooltip_text = tr("Harvested mint - sell at the hanout") if i == 4 else tr("Harvested tomatoes - sell at the hanout")
 			produce_icons.append(icon(i, slot, Rect2(4, 4, 48, 48)))
 		else:
-			slot.tooltip_text = "Empty inventory slot"
+			slot.tooltip_text = tr("Empty inventory slot")
 		if i < 6:
-			var count := place_label(slot, "", Rect2(2, 30, 48, 24), 20, true)
+			var count := place_label(slot, "", Rect2(2, 30, 48, 24), 18, true)
+			count.text_direction = Control.TEXT_DIRECTION_LTR
 			count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			counts.append(count)
 
@@ -318,10 +351,10 @@ func refresh(state: RefCounted, paused: bool) -> void:
 	var hour12 := hour % 12
 	if hour12 == 0:
 		hour12 = 12
-	clock_label.text = "%d:%02d %s" % [hour12, state.minute % 60, "am" if hour < 12 else "pm"]
+	clock_label.text = "%d:%02d %s" % [hour12, state.minute % 60, tr("am") if hour < 12 else tr("pm")]
 	clock_label.add_theme_color_override("font_color", Color("a22e22") if state.minute >= 24 * 60 else INK)
-	var weekdays := ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-	date_label.text = "%s. %d" % [weekdays[(state.day - 1) % 7], state.day]
+	var weekdays := [tr("Mon"), tr("Tue"), tr("Wed"), tr("Thu"), tr("Fri"), tr("Sat"), tr("Sun")]
+	date_label.text = tr("%s. %d") % [weekdays[(state.day - 1) % 7], state.day]
 	money_label.text = str(state.coins)
 	water_meter.value = state.water
 	water_meter.queue_redraw()
@@ -354,6 +387,7 @@ func close_modal() -> void:
 func show_modal(title: String, detail: String, actions: Array) -> void:
 	close_modal()
 	modal = Control.new()
+	modal.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	screen.add_child(modal)
 	var shade := ColorRect.new()

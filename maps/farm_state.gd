@@ -43,13 +43,13 @@ func stage(cell: Vector2i) -> int:
 
 func plant(cell: Vector2i, crop: String) -> String:
 	if not beds.has(cell):
-		return "Plant in a prepared brown bed."
+		return tr("Plant in a prepared brown bed.")
 	if not CROPS.has(crop):
-		return "Choose a seed first."
+		return tr("Choose a seed first.")
 	if beds[cell].crop != "":
-		return "There is already a crop here."
+		return tr("There is already a crop here.")
 	if inventory[crop + "_seed"] <= 0:
-		return "No seeds left. Visit the hanout."
+		return tr("No seeds left. Visit the hanout.")
 	inventory[crop + "_seed"] -= 1
 	beds[cell].crop = crop
 	beds[cell].growth = 0
@@ -58,20 +58,20 @@ func plant(cell: Vector2i, crop: String) -> String:
 
 func water_bed(cell: Vector2i) -> String:
 	if not beds.has(cell):
-		return "Water a prepared bed, or refill at the well / saqya."
+		return tr("Water a prepared bed, or refill at the well / saqya.")
 	if beds[cell].watered:
-		return "Already watered today."
+		return tr("Already watered today.")
 	if is_ready(cell):
-		return "Ready to harvest! Pick it first."
+		return tr("Ready to harvest! Pick it first.")
 	if water <= 0:
-		return "The can is empty. Refill at the well or saqya."
+		return tr("The can is empty. Refill at the well or saqya.")
 	water -= 1
 	beds[cell].watered = true
 	return ""
 
 func harvest(cell: Vector2i) -> String:
 	if not is_ready(cell):
-		return "This crop is not ready yet."
+		return tr("This crop is not ready yet.")
 	var bed: Dictionary = beds[cell]
 	var crop: String = bed.crop
 	inventory[crop] += 1
@@ -88,10 +88,10 @@ func refill() -> void:
 
 func buy_seeds(crop: String) -> String:
 	if not CROPS.has(crop):
-		return "Unknown seed."
+		return tr("Unknown seed.")
 	var cost: int = CROPS[crop].seed_price * 5
 	if coins < cost:
-		return "Not enough coins. Sell some of your harvest."
+		return tr("Not enough coins. Sell some of your harvest.")
 	coins -= cost
 	inventory[crop + "_seed"] += 5
 	return ""
@@ -140,15 +140,15 @@ func describe(cell: Vector2i) -> String:
 	if not beds.has(cell):
 		return ""
 	var bed: Dictionary = beds[cell]
-	var moisture := "Watered" if bed.watered else "Dry"
+	var moisture := tr("Watered") if bed.watered else tr("Dry")
 	if bed.crop == "":
-		return "Empty bed  /  %s" % moisture
-	var crop_name: String = CROPS[bed.crop].name
+		return tr("Empty bed  /  %s") % moisture
+	var crop_name: String = tr(CROPS[bed.crop].name)
 	if is_ready(cell):
-		return "%s  /  Ready to harvest (E)" % crop_name
+		return tr("%s  /  Ready to harvest (E)") % crop_name
 	if bed.regrow > 0:
-		return "%s  /  Regrows in %d watered nights  /  %s" % [crop_name, bed.regrow, moisture]
-	return "%s  /  %d of %d nights  /  %s" % [crop_name, bed.growth, CROPS[bed.crop].days, moisture]
+		return tr("%s  /  Regrows in %d watered nights  /  %s") % [crop_name, bed.regrow, moisture]
+	return tr("%s  /  %d of %d nights  /  %s") % [crop_name, bed.growth, CROPS[bed.crop].days, moisture]
 
 func to_data() -> Dictionary:
 	var records: Array = []
