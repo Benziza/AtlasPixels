@@ -14,6 +14,7 @@ var channels: TileMapLayer
 var channel_image: Image
 var feedback: Node2D
 var player: CharacterBody2D
+var camera: Camera2D
 var bed_edges: Dictionary = {}
 var initial_beds: Dictionary = {}
 var paused := false
@@ -38,6 +39,10 @@ func _ready() -> void:
 	channels = $Terrain/Saqya
 	channel_image = (channels.tile_set.get_source(4) as TileSetAtlasSource).texture.get_image()
 	player = $DepthSort/Player
+	camera = player.get_node("FollowCamera")
+	var map_size: Vector2i = get_meta("map_size_pixels", Vector2i(1280, 896))
+	camera.limit_right = map_size.x
+	camera.limit_bottom = map_size.y
 	for cell in soil.get_used_cells():
 		var uv := soil.get_cell_atlas_coords(cell)
 		bed_edges[cell] = Vector2i(uv.x % 3, uv.y)
@@ -156,9 +161,9 @@ func _process(delta: float) -> void:
 			save_progress()
 			autosave_seconds = 0
 		target = aimed_cell()
-		hud.set_context(context_hint(), player.position)
+		hud.set_context(context_hint(), player.get_global_transform_with_canvas().origin)
 	else:
-		hud.set_context(tr("Paused") if inactive else "", player.position)
+		hud.set_context(tr("Paused") if inactive else "", player.get_global_transform_with_canvas().origin)
 	feedback.queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
