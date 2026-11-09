@@ -18,3 +18,12 @@ script = ExtResource("1_player")
 [node name="Feet" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)
 shape = SubResource("Shape_feet")
+
+[node name="FollowCamera" type="Camera2D" parent="."]
+position = Vector2(0, -24)
+zoom = Vector2(2, 2)
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 896
+process_callback = 0

@@ -330,8 +330,8 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(modal):
 		hint_panel.visible = false
 
-func set_context(text: String, world_point: Vector2) -> void:
-	var should_move := world_point.y > screen.size.y - 140 and absf(world_point.x - screen.size.x / 2) < BAR_WIDTH / 2 + 40
+func set_context(text: String, screen_point: Vector2) -> void:
+	var should_move := screen_point.y > screen.size.y - 140 and absf(screen_point.x - screen.size.x / 2) < BAR_WIDTH / 2 + 40
 	if should_move != toolbar_at_top:
 		toolbar_at_top = should_move
 		anchor_rect(toolbar, Control.PRESET_CENTER_TOP if toolbar_at_top else Control.PRESET_CENTER_BOTTOM, Rect2(-BAR_WIDTH / 2, 18 if toolbar_at_top else -96, BAR_WIDTH, 80))
@@ -344,7 +344,7 @@ func set_context(text: String, world_point: Vector2) -> void:
 	hint_panel.size = Vector2(width, 42)
 	hint_label.size = Vector2(width - 28, 30)
 	var viewport_size := screen.size
-	hint_panel.position = Vector2(clampf(world_point.x - width / 2, 12, viewport_size.x - width - 12), clampf(world_point.y + 38, 12, viewport_size.y - 148)).round()
+	hint_panel.position = Vector2(clampf(screen_point.x - width / 2, 12, viewport_size.x - width - 12), clampf(screen_point.y + 38, 12, viewport_size.y - 148)).round()
 
 func refresh(state: RefCounted, paused: bool) -> void:
 	var hour: int = (state.minute / 60) % 24
