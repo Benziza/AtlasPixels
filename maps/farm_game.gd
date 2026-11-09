@@ -90,7 +90,7 @@ func _ready() -> void:
 	hud.action_requested.connect(menu_action)
 	localize_shop_sign()
 	add_route_sign($FarmExtension, Vector2(1344, 312), tr("To the douar"), 1)
-	add_route_sign(square, Vector2(48, 472), tr("To the farm"), -1)
+	add_route_sign(square, Vector2(256, 380), tr("To the farm"), -1)
 	activate_area(state.area, state.player_position if loaded else $PlayerSpawn.position)
 	refresh_all()
 	if save_blocked:
@@ -121,13 +121,15 @@ func add_route_sign(parent: Node2D, point: Vector2, text: String, direction: int
 	arrow.scale.x = direction
 	arrow.position = Vector2(168 if direction > 0 else 24, 21)
 	sign.add_child(arrow)
+	if parent.has_node("DepthSort"):
+		parent.move_child(sign, parent.get_node("DepthSort").get_index())
 
 func activate_area(area: String, point: Vector2) -> void:
 	var on_farm := area == "farm"
 	var parent: Node2D = $DepthSort if on_farm else square.get_node("DepthSort")
 	if player.get_parent() != parent:
 		player.reparent(parent, false)
-	for node in [$Terrain, $DepthSort, $MapBoundary, $FarmExtension]:
+	for node in [$Terrain, $DepthSort, $MapBoundary, $SaqyaBanks, $FarmExtension]:
 		node.visible = on_farm
 		node.process_mode = Node.PROCESS_MODE_INHERIT if on_farm else Node.PROCESS_MODE_DISABLED
 	square.visible = not on_farm
@@ -410,7 +412,7 @@ func refill_can() -> void:
 func context_hint() -> String:
 	if current_area == "farm" and Rect2(1408, 352, 80, 96).has_point(player.position):
 		return tr("Walk along the path to enter the douar.")
-	if current_area == "douar" and Rect2(48, 352, 96, 128).has_point(player.position):
+	if current_area == "douar" and Rect2(Layout.SQUARE_EXIT.position + Vector2(48, 0), Vector2(96, Layout.SQUARE_EXIT.size.y)).has_point(player.position):
 		return tr("Walk west to return to the farm.")
 	if near_marker("farmhouse", 64):
 		return tr("E  /  Sleep until tomorrow")
