@@ -59,6 +59,7 @@ func footprint(body: StaticBody2D) -> Rect2:
 
 func check_access() -> void:
 	# Four-neighbor 8px search using the player's actual physics shape.
+	var map_size: Vector2i = farm.get_meta("map_size_pixels")
 	var targets: Dictionary = {
 		Vector2i(40, 44): "hanout approach",
 		Vector2i(30, 68): "left fields via bridge",
@@ -74,7 +75,7 @@ func check_access() -> void:
 		targets.erase(current)
 		for offset in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
 			var next: Vector2i = current + offset
-			if next.x < 1 or next.x > 159 or next.y < 2 or next.y > 111 or seen.has(next):
+			if next.x < 1 or next.x > (map_size.x - 8) / 8 or next.y < 2 or next.y > (map_size.y - 8) / 8 or seen.has(next):
 				continue
 			seen[next] = true
 			if can_stand(Vector2(next * 8)):
@@ -158,8 +159,9 @@ func run_tests() -> void:
 	expect((await walk(["move_down"], 60)).y <= 896.1, "Escaped bottom of map")
 	await teleport(Vector2(24, 545))
 	expect((await walk(["move_left"], 60)).x >= 7.9, "Escaped left of map")
-	await teleport(Vector2(1250, 530))
-	expect((await walk(["move_right"], 60)).x <= 1272.1, "Escaped right of map")
+	var map_size: Vector2i = farm.get_meta("map_size_pixels")
+	await teleport(Vector2(map_size.x - 30, 530))
+	expect((await walk(["move_right"], 60)).x <= map_size.x - 7.9, "Escaped right of map")
 	await teleport(Vector2(800, 40))
 	expect((await walk(["move_up"], 60)).y >= 15.9, "Escaped top of map")
 	await teleport(Vector2(864, 352))
