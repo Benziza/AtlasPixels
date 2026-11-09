@@ -267,3 +267,6 @@ msgstr "الحد"
 
 msgid "%s. %d"
 msgstr "%s %d"
+
+msgid "Douar square"
+msgstr "ساحة الدوار"

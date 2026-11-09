@@ -3,3 +3,4 @@ extends RefCounted
 const TILE_SIZE := 32
 const ORIGINAL_FARM_SIZE := Vector2i(1280, 896)
 const FARM_SIZE := Vector2i(1536, 896)
+const SQUARE_SIZE := Vector2i(1024, 768)
