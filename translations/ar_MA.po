@@ -1,0 +1,269 @@
+# Moroccan Darija, written in Arabic script.
+msgid ""
+msgstr ""
+"Project-Id-Version: AtlasPixels\n"
+"Language: ar_MA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Mint"
+msgstr "النعناع"
+
+msgid "Tomato"
+msgstr "مطيشة"
+
+msgid "Plant in a prepared brown bed."
+msgstr "زرع فشي حوض موجد."
+
+msgid "Choose a seed first."
+msgstr "ختار الزريعة اللول."
+
+msgid "There is already a crop here."
+msgstr "هاد الحوض راه مزروع."
+
+msgid "No seeds left. Visit the hanout."
+msgstr "سالات الزريعة. سير للحانوت."
+
+msgid "Water a prepared bed, or refill at the well / saqya."
+msgstr "سقي شي حوض، ولا عمر الرشاشة من البير ولا الساقية."
+
+msgid "Already watered today."
+msgstr "راه تسقى اليوم."
+
+msgid "Ready to harvest! Pick it first."
+msgstr "المحصول واجد! جمعو اللول."
+
+msgid "The can is empty. Refill at the well or saqya."
+msgstr "سالات الما من الرشاشة. عمرها من البير ولا الساقية."
+
+msgid "This crop is not ready yet."
+msgstr "هاد المحصول باقي ما وجدش."
+
+msgid "Unknown seed."
+msgstr "هاد الزريعة ما معروفةش."
+
+msgid "Not enough coins. Sell some of your harvest."
+msgstr "ما عندكش فلوس كافية. بيع شوية من المحصول."
+
+msgid "Watered"
+msgstr "مسقي"
+
+msgid "Dry"
+msgstr "ناشف"
+
+msgid "Empty bed  /  %s"
+msgstr "حوض خاوي / %s"
+
+msgid "%s  /  Ready to harvest (E)"
+msgstr "%s / واجد للجمع (⁦E⁩)"
+
+msgid "%s  /  Regrows in %d watered nights  /  %s"
+msgstr "%s / يعاود يعطي من بعد %d ليالي بالسقي / %s"
+
+msgid "%s  /  %d of %d nights  /  %s"
+msgstr "%s / %d من %d ليالي / %s"
+
+msgid "Save could not be loaded. It has been kept. Pause > New farm to start over."
+msgstr "ما قدرناش نقراو التسجيل القديم وخليناه محفوظ. وقف اللعب واختار «فيرمة جديدة» باش تبدا من جديد."
+
+msgid "Welcome back!"
+msgstr "مرحبا بيك من جديد!"
+
+msgid "Your seeds are ready. Plant in the empty nursery left of the house, then water it."
+msgstr "الزريعة واجدة. زرع فالأحواض الخاويين على ليسر الدار، ومن بعد سقيهم."
+
+msgid "It is midnight. Head home to sleep before 02:00."
+msgstr "دازت نص الليل. رجع للدار باش تنعس قبل ⁦02:00⁩."
+
+msgid "Paused"
+msgstr "اللعب واقف"
+
+msgid "Use the prepared brown beds. The nursery has space for seeds."
+msgstr "زرع فالأحواض الموجدين. كاينين أحواض خاويين حدا الدار."
+
+msgid "Walk closer to that bed."
+msgstr "قرب شوية لهاد الحوض."
+
+msgid "%s planted. Water it today."
+msgstr "تزرع %s. سقيه اليوم."
+
+msgid "Watered. This crop will grow overnight."
+msgstr "تسقى الزرع، وغادي يكبر الليلة."
+
+msgid "+1 %s in your basket"
+msgstr "زاد %s فالقفة: ⁦+1⁩"
+
+msgid "E: harvest a ripe crop, refill by water, visit the hanout, or sleep at your door."
+msgstr "⁦E⁩: جمع المحصول، عمر الرشاشة، دخل للحانوت ولا نعس حدا باب الدار."
+
+msgid "Watering can refilled: 40 / 40"
+msgstr "تعمرات الرشاشة: ⁦40 / 40⁩"
+
+msgid "E  /  Sleep until tomorrow"
+msgstr "⁦E⁩ / نعس حتى لغدا"
+
+msgid "E  /  Hanout: seeds and harvest"
+msgstr "⁦E⁩ / الحانوت: الزريعة والمحصول"
+
+msgid "Walk closer to this bed"
+msgstr "قرب شوية لهاد الحوض"
+
+msgid "E  /  Refill your watering can"
+msgstr "⁦E⁩ / عمر رشاشة الما"
+
+msgid "Could not save. Your farm is still open; try saving again from Pause."
+msgstr "ما قدرناش نسجلو الفيرمة. جرب تسجلها من قائمة التوقيف."
+
+msgid "A moment in the douar"
+msgstr "وقف شوية فالدوار"
+
+msgid "WASD / arrows: move.  1-4: select a tool.\nClick / Space: use.  E: interact.\nMint: 4 watered nights, one harvest.\nTomato: 11 nights, then 4 to regrow.\nYour farm saves automatically."
+msgstr "تحرك ب⁦WASD⁩ ولا السهام، وختار الأداة ب⁦1-4⁩.\nالكليك ولا زر المسافة: استعمل الأداة. ⁦E⁩: تفاعل.\nالنعناع: 4 ليالي بالسقي، وكتجمعو غير مرة.\nمطيشة: 11 ليلة، ومن بعد كتعاود كل 4 ليالي بالسقي.\nالفيرمة كتتسجل بوحدها."
+
+msgid "Continue"
+msgstr "كمل اللعب"
+
+msgid "Save farm"
+msgstr "سجل الفيرمة"
+
+msgid "New farm..."
+msgstr "فيرمة جديدة..."
+
+msgid "Sleep until tomorrow?"
+msgstr "بغيتي تنعس حتى لغدا؟"
+
+msgid "%d growing crops still need water.\nOnly watered crops will grow tonight.\nYou will wake up at 06:00."
+msgstr "%d من الزرع باقي خاصو الما.\nغير اللي تسقى غادي يكبر الليلة.\nغادي تفيق مع ⁦06:00⁩."
+
+msgid "Sleep and save"
+msgstr "نعس وسجل"
+
+msgid "Keep working"
+msgstr "كمل الخدمة"
+
+msgid "The hanout"
+msgstr "الحانوت"
+
+msgid "5 mint seeds  /  25 coins"
+msgstr "زريعة النعناع: 5 بـ 25"
+
+msgid "5 tomato seeds  /  50 coins"
+msgstr "زريعة مطيشة: 5 بـ 50"
+
+msgid "Sell harvest  /  Mint 15, Tomato 35"
+msgstr "بيع المحصول / النعناع 15، مطيشة 35"
+
+msgid "Back to the farm"
+msgstr "رجع للفيرمة"
+
+msgid "Coins: %d\nBasket: %d mint / %d tomatoes\nSeeds: %d mint / %d tomato"
+msgstr "الفلوس: %d\nالقفة: %d نعناع / %d مطيشة\nالزريعة: %d نعناع / %d مطيشة"
+
+msgid "Farm saved."
+msgstr "تسجلات الفيرمة."
+
+msgid "Could not save. If the old save is unreadable, start a new farm to replace it."
+msgstr "ما قدرناش نسجلو. إلا التسجيل القديم ما تقراش، بدا فيرمة جديدة باش تبدلو."
+
+msgid "Start a new farm?"
+msgstr "تبدا فيرمة جديدة؟"
+
+msgid "This replaces your saved farm, crops and inventory."
+msgstr "هادشي غادي يبدل الفيرمة المسجلة، الزرع وداكشي اللي فالقفة."
+
+msgid "Keep my farm"
+msgstr "خلي ليا الفيرمة ديالي"
+
+msgid "Start fresh"
+msgstr "بدا من جديد"
+
+msgid "A fresh start! Plant your first seeds in the empty nursery."
+msgstr "بداية جديدة! زرع الزريعة فالأحواض الخاويين."
+
+msgid "Seeds added to your bag."
+msgstr "تزادت الزريعة فالقفة ديالك."
+
+msgid "Sold for %d coins."
+msgstr "تبع المحصول بـ %d قطعة."
+
+msgid "Your basket is empty."
+msgstr "القفة ديالك خاوية."
+
+msgid "02:00 - time to rest. "
+msgstr "⁦02:00⁩، جا وقت النعاس. "
+
+msgid "Day %d: %d crops grew; %d waited for water."
+msgstr "النهار %d: كبر %d من الزرع، و%d بقا كيتسنى الما."
+
+msgid "The day runs from 6:00 am to 2:00 am.\nSleep at your front door to start tomorrow."
+msgstr "النهار كيبدا مع ⁦06:00⁩ وكيسالي مع ⁦02:00⁩.\nنعس حدا باب دارك باش يبدا نهار جديد."
+
+msgid "Mon. 1"
+msgstr "التنين 1"
+
+msgid "Douar"
+msgstr "الدوار"
+
+msgid "6:00 am"
+msgstr "6:00 ص"
+
+msgid "Coins\nSell your harvest at the hanout."
+msgstr "الفلوس\nبيع المحصول ديالك فالحانوت."
+
+msgid "Watering can\nPress E at the well or saqya to refill."
+msgstr "رشاشة الما\nضغط على ⁦E⁩ حدا البير ولا الساقية باش تعمرها."
+
+msgid "Pause / help (Esc)"
+msgstr "وقف اللعب / المساعدة (⁦Esc⁩)"
+
+msgid "Mint seeds\n4 watered nights to grow.\nClick a bed or press Space to plant."
+msgstr "زريعة النعناع\nكتوجد من بعد 4 ليالي بالسقي.\nكليكي على الحوض ولا ضغط على زر المسافة باش تزرع."
+
+msgid "Tomato seeds\n11 watered nights; regrows every 4.\nClick a bed or press Space to plant."
+msgstr "زريعة مطيشة\nكتوجد فـ 11 ليلة بالسقي، وكتعاود كل 4 ليالي.\nكليكي على الحوض ولا ضغط على زر المسافة باش تزرع."
+
+msgid "Watering can\nWater a nearby bed once each day.\nE at the well / saqya refills the can."
+msgstr "رشاشة الما\nسقي الحوض مرة وحدة فالنهار.\nعمرها ب⁦E⁩ حدا البير ولا الساقية."
+
+msgid "Harvest\nPick a ripe crop with Click, Space or E."
+msgstr "جمع المحصول\nجمع اللي وجد بالكليك، بزر المسافة ولا ب⁦E⁩."
+
+msgid "Harvested mint - sell at the hanout"
+msgstr "النعناع اللي جمعتي، بيعو فالحانوت"
+
+msgid "Harvested tomatoes - sell at the hanout"
+msgstr "مطيشة اللي جمعتي، بيعها فالحانوت"
+
+msgid "Empty inventory slot"
+msgstr "بلاصة خاوية فالقفة"
+
+msgid "am"
+msgstr "ص"
+
+msgid "pm"
+msgstr "م"
+
+msgid "Mon"
+msgstr "التنين"
+
+msgid "Tue"
+msgstr "الثلاث"
+
+msgid "Wed"
+msgstr "الربع"
+
+msgid "Thu"
+msgstr "الخميس"
+
+msgid "Fri"
+msgstr "الجمعة"
+
+msgid "Sat"
+msgstr "السبت"
+
+msgid "Sun"
+msgstr "الحد"
+
+msgid "%s. %d"
+msgstr "%s %d"

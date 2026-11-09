@@ -32,6 +32,7 @@ var flash_color := Color.WHITE
 var markers: Dictionary = {}
 
 func _ready() -> void:
+	TranslationServer.set_locale("ar_MA")
 	soil = $Terrain/Soil
 	crops = $Terrain/Crops
 	channels = $Terrain/Saqya
@@ -74,13 +75,36 @@ func _ready() -> void:
 	add_child(hud)
 	hud.tool_selected.connect(select_tool)
 	hud.action_requested.connect(menu_action)
+	localize_shop_sign()
 	refresh_all()
 	if save_blocked:
-		show_toast("Save could not be loaded. It has been kept. Pause > New farm to start over.", 12)
+		show_toast(tr("Save could not be loaded. It has been kept. Pause > New farm to start over."), 12)
 	else:
-		show_toast("Welcome back!" if loaded else "Your seeds are ready. Plant in the empty nursery left of the house, then water it.", 9)
+		show_toast(tr("Welcome back!") if loaded else tr("Your seeds are ready. Plant in the empty nursery left of the house, then water it."), 9)
 	if persistence_enabled:
 		get_tree().auto_accept_quit = false
+
+func localize_shop_sign() -> void:
+	# Cover only the baked Latin lettering; keep the sign's frame and ornaments.
+	for body in $DepthSort.get_children():
+		if body.get_meta("pattern", "") != "hanout":
+			continue
+		var artwork: Sprite2D = body.get_node("Artwork")
+		var texture: AtlasTexture = artwork.texture
+		var plate := ColorRect.new()
+		plate.layout_direction = Control.LAYOUT_DIRECTION_LTR
+		plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		artwork.add_child(plate)
+		plate.position = Vector2(76, 98)
+		plate.size = Vector2(72, 14)
+		plate.color = texture.atlas.get_image().get_pixelv(Vector2i(texture.region.position) + Vector2i(76, 110))
+		var sign: Label = hud.label(tr("The hanout"), 14)
+		sign.name = "HanoutSign"
+		plate.add_child(sign)
+		sign.position = Vector2(0, -3)
+		sign.size = Vector2(72, 20)
+		sign.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		sign.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
 func validate_spawn() -> void:
 	await get_tree().physics_frame
@@ -126,7 +150,7 @@ func _process(delta: float) -> void:
 			update_daylight()
 			refresh_hud()
 			if state.minute == 24 * 60:
-				show_toast("It is midnight. Head home to sleep before 02:00.", 7)
+				show_toast(tr("It is midnight. Head home to sleep before 02:00."), 7)
 		autosave_seconds += delta
 		if autosave_seconds >= 30:
 			save_progress()
@@ -134,7 +158,7 @@ func _process(delta: float) -> void:
 		target = aimed_cell()
 		hud.set_context(context_hint(), player.position)
 	else:
-		hud.set_context("Paused" if inactive else "", player.position)
+		hud.set_context(tr("Paused") if inactive else "", player.position)
 	feedback.queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -206,10 +230,10 @@ func use_tool(cell: Vector2i) -> bool:
 		refill_can()
 		return true
 	if not state.beds.has(cell):
-		show_toast("Use the prepared brown beds. The nursery has space for seeds.")
+		show_toast(tr("Use the prepared brown beds. The nursery has space for seeds."))
 		return false
 	if not can_reach(cell):
-		show_toast("Walk closer to that bed.")
+		show_toast(tr("Walk closer to that bed."))
 		return false
 	var error := ""
 	var success := ""
@@ -218,16 +242,16 @@ func use_tool(cell: Vector2i) -> bool:
 		0, 1:
 			var crop := "mint" if state.selected_tool == 0 else "tomato"
 			error = state.plant(cell, crop)
-			success = "%s planted. Water it today." % FarmState.CROPS[crop].name
+			success = tr("%s planted. Water it today.") % tr(FarmState.CROPS[crop].name)
 		2:
 			error = state.water_bed(cell)
-			success = "Watered. This crop will grow overnight."
+			success = tr("Watered. This crop will grow overnight.")
 			color = Color("71d9e3")
 		3:
 			var crop: String = state.beds[cell].crop
 			error = state.harvest(cell)
 			if error.is_empty():
-				success = "+1 %s in your basket" % FarmState.CROPS[crop].name
+				success = tr("+1 %s in your basket") % tr(FarmState.CROPS[crop].name)
 			color = Color("c9e882")
 	if not error.is_empty():
 		show_toast(error)
@@ -279,24 +303,24 @@ func interact() -> void:
 			state.selected_tool = previous
 			refresh_hud()
 		else:
-			show_toast("E: harvest a ripe crop, refill by water, visit the hanout, or sleep at your door.", 4)
+			show_toast(tr("E: harvest a ripe crop, refill by water, visit the hanout, or sleep at your door."), 4)
 
 func refill_can() -> void:
 	state.refill()
 	cooldown = 0.2
 	refresh_hud()
-	show_toast("Watering can refilled: 40 / 40")
+	show_toast(tr("Watering can refilled: 40 / 40"))
 	save_progress()
 
 func context_hint() -> String:
 	if near_marker("farmhouse", 64):
-		return "E  /  Sleep until tomorrow"
+		return tr("E  /  Sleep until tomorrow")
 	if near_marker("hanout", 58):
-		return "E  /  Hanout: seeds and harvest"
+		return tr("E  /  Hanout: seeds and harvest")
 	if state.beds.has(target):
-		return state.describe(target) if can_reach(target) else "Walk closer to this bed"
+		return state.describe(target) if can_reach(target) else tr("Walk closer to this bed")
 	if water_nearby():
-		return "E  /  Refill your watering can"
+		return tr("E  /  Refill your watering can")
 	return ""
 
 func refresh_cell(cell: Vector2i) -> void:
@@ -336,7 +360,7 @@ func save_progress() -> bool:
 	if error != OK:
 		push_warning("Farm save failed: " + error_string(error))
 		if is_instance_valid(hud):
-			show_toast("Could not save. Your farm is still open; try saving again from Pause.", 8)
+			show_toast(tr("Could not save. Your farm is still open; try saving again from Pause."), 8)
 	return error == OK
 
 func set_paused(value: bool) -> void:
@@ -351,7 +375,7 @@ func close_menu() -> void:
 
 func open_pause() -> void:
 	set_paused(true)
-	hud.show_modal("A moment in the douar", "WASD / arrows: move.  1-4: select a tool.\nClick / Space: use.  E: interact.\nMint: 4 watered nights, one harvest.\nTomato: 11 nights, then 4 to regrow.\nYour farm saves automatically.", [["Continue", "close"], ["Save farm", "save"], ["New farm...", "new_confirm"]])
+	hud.show_modal(tr("A moment in the douar"), tr("WASD / arrows: move.  1-4: select a tool.\nClick / Space: use.  E: interact.\nMint: 4 watered nights, one harvest.\nTomato: 11 nights, then 4 to regrow.\nYour farm saves automatically."), [[tr("Continue"), "close"], [tr("Save farm"), "save"], [tr("New farm..."), "new_confirm"]])
 
 func open_sleep() -> void:
 	set_paused(true)
@@ -359,14 +383,14 @@ func open_sleep() -> void:
 	for cell: Vector2i in state.beds:
 		if state.beds[cell].crop != "" and not state.is_ready(cell) and not state.beds[cell].watered:
 			dry += 1
-	hud.show_modal("Sleep until tomorrow?", "%d growing crops still need water.\nOnly watered crops will grow tonight.\nYou will wake up at 06:00." % dry, [["Sleep and save", "sleep"], ["Keep working", "close"]])
+	hud.show_modal(tr("Sleep until tomorrow?"), tr("%d growing crops still need water.\nOnly watered crops will grow tonight.\nYou will wake up at 06:00.") % dry, [[tr("Sleep and save"), "sleep"], [tr("Keep working"), "close"]])
 
 func open_shop() -> void:
 	set_paused(true)
-	hud.show_modal("The hanout", shop_text(), [["5 mint seeds  /  25 coins", "buy_mint"], ["5 tomato seeds  /  50 coins", "buy_tomato"], ["Sell harvest  /  Mint 15, Tomato 35", "sell"], ["Back to the farm", "close"]])
+	hud.show_modal(tr("The hanout"), shop_text(), [[tr("5 mint seeds  /  25 coins"), "buy_mint"], [tr("5 tomato seeds  /  50 coins"), "buy_tomato"], [tr("Sell harvest  /  Mint 15, Tomato 35"), "sell"], [tr("Back to the farm"), "close"]])
 
 func shop_text() -> String:
-	return "Coins: %d\nBasket: %d mint / %d tomatoes\nSeeds: %d mint / %d tomato" % [state.coins, state.inventory.mint, state.inventory.tomato, state.inventory.mint_seed, state.inventory.tomato_seed]
+	return tr("Coins: %d\nBasket: %d mint / %d tomatoes\nSeeds: %d mint / %d tomato") % [state.coins, state.inventory.mint, state.inventory.tomato, state.inventory.mint_seed, state.inventory.tomato_seed]
 
 func menu_action(action: String) -> void:
 	match action:
@@ -379,9 +403,9 @@ func menu_action(action: String) -> void:
 			end_day(false)
 		"save":
 			var saved := save_progress()
-			hud.modal_detail.text = "Farm saved." if saved else "Could not save. If the old save is unreadable, start a new farm to replace it."
+			hud.modal_detail.text = tr("Farm saved.") if saved else tr("Could not save. If the old save is unreadable, start a new farm to replace it.")
 		"new_confirm":
-			hud.show_modal("Start a new farm?", "This replaces your saved farm, crops and inventory.", [["Keep my farm", "close"], ["Start fresh", "new_farm"]])
+			hud.show_modal(tr("Start a new farm?"), tr("This replaces your saved farm, crops and inventory."), [[tr("Keep my farm"), "close"], [tr("Start fresh"), "new_farm"]])
 		"new_farm":
 			state = FarmState.new()
 			state.initialize(initial_beds)
@@ -390,15 +414,15 @@ func menu_action(action: String) -> void:
 			close_menu()
 			refresh_all()
 			save_progress()
-			show_toast("A fresh start! Plant your first seeds in the empty nursery.", 6)
+			show_toast(tr("A fresh start! Plant your first seeds in the empty nursery."), 6)
 		"buy_mint", "buy_tomato":
 			var error: String = state.buy_seeds(action.trim_prefix("buy_"))
-			hud.modal_detail.text = shop_text() + "\n" + ("Seeds added to your bag." if error.is_empty() else error)
+			hud.modal_detail.text = shop_text() + "\n" + (tr("Seeds added to your bag.") if error.is_empty() else error)
 			refresh_hud()
 			save_progress()
 		"sell":
 			var earned: int = state.sell_harvest()
-			hud.modal_detail.text = shop_text() + "\n" + ("Sold for %d coins." % earned if earned > 0 else "Your basket is empty.")
+			hud.modal_detail.text = shop_text() + "\n" + (tr("Sold for %d coins.") % earned if earned > 0 else tr("Your basket is empty."))
 			refresh_hud()
 			save_progress()
 
@@ -424,7 +448,7 @@ func end_day(forced: bool) -> void:
 	transitioning = false
 	player.controls_enabled = not inactive
 	refresh_hud()
-	show_toast(("02:00 - time to rest. " if forced else "") + "Day %d: %d crops grew; %d waited for water." % [state.day, summary.grown, summary.missed], 7)
+	show_toast((tr("02:00 - time to rest. ") if forced else "") + tr("Day %d: %d crops grew; %d waited for water.") % [state.day, summary.grown, summary.missed], 7)
 
 func draw_feedback() -> void:
 	if not is_instance_valid(player) or paused or inactive or transitioning:
