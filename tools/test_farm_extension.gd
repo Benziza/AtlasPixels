@@ -54,7 +54,7 @@ func run_tests() -> void:
 	expect(game.player.position.x > 1440, "Old perimeter still blocks the eastern clearing")
 	expect(can_stand(Vector2(1424, 720)), "New southern clearing is obstructed")
 	expect(not can_stand(Vector2(1424, 480)), "New saqya water has no collision")
-	game.player.position = Vector2(1512, 416)
+	game.player.position = Vector2(1512, 530)
 	await settle()
 	Input.action_press("move_right")
 	await settle(30)

@@ -2,10 +2,13 @@ extends Node2D
 ## Runtime farming layer. The authored map and its builders stay reusable.
 const FarmState = preload("res://maps/farm_state.gd")
 const FarmHUD = preload("res://maps/farm_hud.gd")
+const Layout = preload("res://maps/world_layout.gd")
+const Square = preload("res://maps/douar_square.tscn")
 const TILE := 32
 const REACH := 58.0
 const SAVE_PATH := "user://farm-save.json"
 @export var persistence_enabled := true
+@export var save_path := SAVE_PATH
 var state := FarmState.new()
 var hud: CanvasLayer
 var soil: TileMapLayer
@@ -15,6 +18,9 @@ var channel_image: Image
 var feedback: Node2D
 var player: CharacterBody2D
 var camera: Camera2D
+var square: Node2D
+var current_area := "farm"
+var square_markers: Dictionary = {}
 var bed_edges: Dictionary = {}
 var initial_beds: Dictionary = {}
 var paused := false
@@ -43,6 +49,10 @@ func _ready() -> void:
 	var map_size: Vector2i = get_meta("map_size_pixels", Vector2i(1280, 896))
 	camera.limit_right = map_size.x
 	camera.limit_bottom = map_size.y
+	square = Square.instantiate()
+	square.visible = false
+	square.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(square)
 	for cell in soil.get_used_cells():
 		var uv := soil.get_cell_atlas_coords(cell)
 		bed_edges[cell] = Vector2i(uv.x % 3, uv.y)
@@ -57,16 +67,14 @@ func _ready() -> void:
 		initial_beds[cell] = bed
 	state.initialize(initial_beds)
 	var loaded := false
-	if persistence_enabled and FileAccess.file_exists(SAVE_PATH):
-		loaded = state.load_file(SAVE_PATH)
+	if persistence_enabled and FileAccess.file_exists(save_path):
+		loaded = state.load_file(save_path)
 		save_blocked = not loaded
 	if loaded:
 		player.position = state.player_position
 		call_deferred("validate_spawn")
-	for body in $DepthSort.get_children():
-		if body.has_meta("pattern") and body.get_meta("pattern") in ["farmhouse", "hanout", "well"]:
-			var rect: Rect2 = body.get_meta("footprint_local")
-			markers[body.get_meta("pattern")] = body.position + Vector2(rect.get_center().x, rect.end.y + 14)
+	markers = collect_markers($DepthSort, ["farmhouse", "hanout", "well"])
+	square_markers = collect_markers(square.get_node("DepthSort"), ["hanout", "well"])
 	daylight = CanvasModulate.new()
 	daylight.name = "Daylight"
 	add_child(daylight)
@@ -81,6 +89,9 @@ func _ready() -> void:
 	hud.tool_selected.connect(select_tool)
 	hud.action_requested.connect(menu_action)
 	localize_shop_sign()
+	add_route_sign($FarmExtension, Vector2(1344, 312), tr("To the douar"), 1)
+	add_route_sign(square, Vector2(48, 472), tr("To the farm"), -1)
+	activate_area(state.area, state.player_position if loaded else $PlayerSpawn.position)
 	refresh_all()
 	if save_blocked:
 		show_toast(tr("Save could not be loaded. It has been kept. Pause > New farm to start over."), 12)
@@ -88,6 +99,76 @@ func _ready() -> void:
 		show_toast(tr("Welcome back!") if loaded else tr("Your seeds are ready. Plant in the empty nursery left of the house, then water it."), 9)
 	if persistence_enabled:
 		get_tree().auto_accept_quit = false
+
+func collect_markers(parent: Node, patterns: Array) -> Dictionary:
+	var result := {}
+	for body in parent.get_children():
+		var pattern: String = body.get_meta("pattern", "")
+		if pattern in patterns:
+			var rect: Rect2 = body.get_meta("footprint_local")
+			result[pattern] = body.position + Vector2(rect.get_center().x, rect.end.y + 14)
+	return result
+
+func add_route_sign(parent: Node2D, point: Vector2, text: String, direction: int) -> void:
+	var sign: Control = hud.frame(parent, Rect2(point, Vector2(192, 42)))
+	sign.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var label: Label = hud.place_label(sign, text, Rect2(12 if direction > 0 else 40, 6, 140, 30), 18)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# Draw the arrow in world space: its direction is independent of Arabic BiDi.
+	var arrow := Polygon2D.new()
+	arrow.polygon = PackedVector2Array([Vector2(-10, -4), Vector2(0, -4), Vector2(0, -10), Vector2(10, 0), Vector2(0, 10), Vector2(0, 4), Vector2(-10, 4)])
+	arrow.color = FarmHUD.INK
+	arrow.scale.x = direction
+	arrow.position = Vector2(168 if direction > 0 else 24, 21)
+	sign.add_child(arrow)
+
+func activate_area(area: String, point: Vector2) -> void:
+	var on_farm := area == "farm"
+	var parent: Node2D = $DepthSort if on_farm else square.get_node("DepthSort")
+	if player.get_parent() != parent:
+		player.reparent(parent, false)
+	for node in [$Terrain, $DepthSort, $MapBoundary, $FarmExtension]:
+		node.visible = on_farm
+		node.process_mode = Node.PROCESS_MODE_INHERIT if on_farm else Node.PROCESS_MODE_DISABLED
+	square.visible = not on_farm
+	square.process_mode = Node.PROCESS_MODE_DISABLED if on_farm else Node.PROCESS_MODE_INHERIT
+	current_area = area
+	state.area = area
+	player.position = point
+	player.velocity = Vector2.ZERO
+	state.player_position = point
+	mouse_aim = false
+	var size_: Vector2i = Layout.FARM_SIZE if on_farm else Layout.SQUARE_SIZE
+	camera.limit_right = size_.x
+	camera.limit_bottom = size_.y
+	camera.make_current()
+	camera.reset_smoothing()
+	camera.force_update_scroll()
+
+func _physics_process(_delta: float) -> void:
+	if paused or inactive or transitioning:
+		return
+	var exit_: Rect2 = Layout.FARM_EXIT if current_area == "farm" else Layout.SQUARE_EXIT
+	if exit_.has_point(player.position):
+		transitioning = true
+		player.controls_enabled = false
+		player.velocity = Vector2.ZERO
+		call_deferred("travel_to", "douar" if current_area == "farm" else "farm")
+
+func travel_to(area: String) -> void:
+	refresh_hud()
+	var fade := create_tween()
+	fade.tween_property(hud.day_fade, "color:a", 1.0, 0.15)
+	await fade.finished
+	activate_area(area, square.get_node("PlayerSpawn").position if area == "douar" else Layout.FARM_RETURN)
+	show_toast(tr("Welcome to the douar square.") if area == "douar" else tr("Back on your farm."), 5)
+	var dawn := create_tween()
+	dawn.tween_property(hud.day_fade, "color:a", 0.0, 0.15)
+	await dawn.finished
+	transitioning = false
+	player.controls_enabled = not inactive
+	refresh_hud()
+	save_progress()
 
 func localize_shop_sign() -> void:
 	# Cover only the baked Latin lettering; keep the sign's frame and ornaments.
@@ -114,12 +195,13 @@ func localize_shop_sign() -> void:
 func validate_spawn() -> void:
 	await get_tree().physics_frame
 	var query := PhysicsShapeQueryParameters2D.new()
-	query.shape = $DepthSort/Player/Feet.shape
-	query.transform = Transform2D(0, player.position + Vector2(0, -8))
+	query.shape = player.get_node("Feet").shape
+	query.transform = Transform2D(0, player.global_position + Vector2(0, -8))
 	query.collision_mask = 1
 	query.exclude = [player.get_rid()]
 	if not get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty():
-		player.position = $PlayerSpawn.position
+		player.position = $PlayerSpawn.position if current_area == "farm" else square.get_node("PlayerSpawn").position
+		camera.force_update_scroll()
 
 func _notification(what: int) -> void:
 	if not is_instance_valid(hud):
@@ -231,9 +313,12 @@ func use_tool(cell: Vector2i) -> bool:
 	if paused or inactive or transitioning or cooldown > 0:
 		return false
 	cooldown = 0.18
-	if state.selected_tool == 2 and water_nearby() and not state.beds.has(cell):
+	if state.selected_tool == 2 and water_nearby() and (current_area != "farm" or not state.beds.has(cell)):
 		refill_can()
 		return true
+	if current_area != "farm":
+		show_toast(tr("Planting is only available on the farm."))
+		return false
 	if not state.beds.has(cell):
 		show_toast(tr("Use the prepared brown beds. The nursery has space for seeds."))
 		return false
@@ -271,11 +356,14 @@ func use_tool(cell: Vector2i) -> bool:
 	return true
 
 func near_marker(name_: String, distance: float = 52.0) -> bool:
-	return markers.has(name_) and player.global_position.distance_to(markers[name_]) <= distance
+	var active_markers: Dictionary = markers if current_area == "farm" else square_markers
+	return active_markers.has(name_) and player.position.distance_to(active_markers[name_]) <= distance
 
 func water_nearby() -> bool:
 	if near_marker("well", 58):
 		return true
+	if current_area != "farm":
+		return false
 	# Use visible water pixels, not the empty portions of a channel's tile.
 	var origin := player.global_position + Vector2(0, -8)
 	for offset in [Vector2(0, -34), Vector2(0, 34), Vector2(-34, 0), Vector2(34, 0), Vector2.ZERO]:
@@ -299,6 +387,8 @@ func interact() -> void:
 		open_shop()
 	elif water_nearby():
 		refill_can()
+	elif current_area != "farm":
+		show_toast(tr("Explore the square, or take the western path back to your farm."), 4)
 	else:
 		var cell := aimed_cell()
 		if state.is_ready(cell) and can_reach(cell):
@@ -318,11 +408,15 @@ func refill_can() -> void:
 	save_progress()
 
 func context_hint() -> String:
+	if current_area == "farm" and Rect2(1408, 352, 80, 96).has_point(player.position):
+		return tr("Walk along the path to enter the douar.")
+	if current_area == "douar" and Rect2(48, 352, 96, 128).has_point(player.position):
+		return tr("Walk west to return to the farm.")
 	if near_marker("farmhouse", 64):
 		return tr("E  /  Sleep until tomorrow")
 	if near_marker("hanout", 58):
 		return tr("E  /  Hanout: seeds and harvest")
-	if state.beds.has(target):
+	if current_area == "farm" and state.beds.has(target):
 		return state.describe(target) if can_reach(target) else tr("Walk closer to this bed")
 	if water_nearby():
 		return tr("E  /  Refill your watering can")
@@ -361,7 +455,8 @@ func save_progress() -> bool:
 	if not persistence_enabled or save_blocked:
 		return false
 	state.player_position = player.position
-	var error := state.save_file(SAVE_PATH)
+	state.area = current_area
+	var error := state.save_file(save_path)
 	if error != OK:
 		push_warning("Farm save failed: " + error_string(error))
 		if is_instance_valid(hud):
@@ -415,7 +510,7 @@ func menu_action(action: String) -> void:
 			state = FarmState.new()
 			state.initialize(initial_beds)
 			save_blocked = false
-			player.position = $PlayerSpawn.position
+			activate_area("farm", $PlayerSpawn.position)
 			close_menu()
 			refresh_all()
 			save_progress()
@@ -444,7 +539,7 @@ func end_day(forced: bool) -> void:
 	fade.tween_property(hud.day_fade, "color:a", 1.0, 0.35)
 	await fade.finished
 	var summary: Dictionary = state.next_day()
-	player.position = $PlayerSpawn.position
+	activate_area("farm", $PlayerSpawn.position)
 	refresh_all()
 	save_progress()
 	var dawn := create_tween()
@@ -456,7 +551,7 @@ func end_day(forced: bool) -> void:
 	show_toast((tr("02:00 - time to rest. ") if forced else "") + tr("Day %d: %d crops grew; %d waited for water.") % [state.day, summary.grown, summary.missed], 7)
 
 func draw_feedback() -> void:
-	if not is_instance_valid(player) or paused or inactive or transitioning:
+	if not is_instance_valid(player) or paused or inactive or transitioning or current_area != "farm":
 		return
 	if state.beds.has(target):
 		var color := Color("f6e2a0") if can_reach(target) else Color("dc8168")

@@ -27,7 +27,7 @@ func test_catalog() -> void:
 	font.allow_system_fallback = false
 	var placeholders := RegEx.new()
 	placeholders.compile("%[-+0 #]*[0-9]*(?:\\.[0-9]+)?[sdif]")
-	var arabic_characters: Dictionary = {}
+	var characters: Dictionary = {}
 	for message: String in catalog.get_message_list():
 		var translated := String(catalog.get_message(message))
 		expect(not translated.is_empty() and translated != message, "Missing Darija translation: " + message)
@@ -40,10 +40,10 @@ func test_catalog() -> void:
 		expect(expected_formats == actual_formats, "Changed formatting placeholders: " + message)
 		for character in translated:
 			var code := character.unicode_at(0)
-			if code >= 0x0600 and code <= 0x06ff:
-				arabic_characters[code] = true
-	for code: int in arabic_characters:
-		expect(font.has_char(code), "Bundled font lacks Arabic character U+%04X" % code)
+			if code >= 32 and not (code >= 0x2066 and code <= 0x2069):
+				characters[code] = true
+	for code: int in characters:
+		expect(font.has_char(code), "Bundled font lacks character U+%04X" % code)
 	# Cover literal tr() calls as well as the dynamically translated crop names.
 	var calls := RegEx.new()
 	calls.compile('tr\\("((?:[^"\\\\]|\\\\.)*)"\\)')

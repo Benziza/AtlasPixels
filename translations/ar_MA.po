@@ -270,3 +270,27 @@ msgstr "%s %d"
 
 msgid "Douar square"
 msgstr "ساحة الدوار"
+
+msgid "To the douar"
+msgstr "لساحة الدوار"
+
+msgid "To the farm"
+msgstr "للفيرمة"
+
+msgid "Walk along the path to enter the douar."
+msgstr "تبع الطريق باش تدخل لساحة الدوار."
+
+msgid "Walk west to return to the farm."
+msgstr "رجع فالطريق على ليسر باش توصل للفيرمة."
+
+msgid "Welcome to the douar square."
+msgstr "مرحبا بيك فساحة الدوار."
+
+msgid "Back on your farm."
+msgstr "رجعتي للفيرمة ديالك."
+
+msgid "Explore the square, or take the western path back to your farm."
+msgstr "دور فساحة الدوار، ولا رجع فالطريق على ليسر للفيرمة ديالك."
+
+msgid "Planting is only available on the farm."
+msgstr "الزرع كيتدار غير فالفيرمة."
