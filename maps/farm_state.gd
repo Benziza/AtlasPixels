@@ -18,6 +18,7 @@ var coins := 100
 var inventory := {"mint_seed": 20, "tomato_seed": 20, "mint": 0, "tomato": 0}
 var selected_tool := 0
 var player_position := Vector2(864, 352)
+var area := "farm"
 
 static func empty_bed() -> Dictionary:
 	return {"crop": "", "growth": 0, "watered": false, "regrow": -1}
@@ -158,7 +159,7 @@ func to_data() -> Dictionary:
 		record["x"] = cell.x
 		record["y"] = cell.y
 		records.append(record)
-	return {"version": 1, "day": day, "minute": minute, "tick_seconds": tick_seconds,
+	return {"version": 2, "area": area, "day": day, "minute": minute, "tick_seconds": tick_seconds,
 		"water": water, "coins": coins, "inventory": inventory.duplicate(), "selected_tool": selected_tool,
 		"player": [player_position.x, player_position.y], "beds": records}
 
@@ -167,7 +168,10 @@ static func whole(value: Variant, low: int, high: int) -> bool:
 
 func restore(data: Variant) -> bool:
 	# Validate everything before mutating live state. A bad file cannot partially load.
-	if not data is Dictionary or data.get("version") != 1:
+	if not data is Dictionary or not whole(data.get("version"), 1, 2):
+		return false
+	var saved_area: Variant = "farm" if int(data.version) == 1 else data.get("area")
+	if not saved_area is String or saved_area not in ["farm", "douar"]:
 		return false
 	for spec in [["day", 1, 1000000], ["minute", START_MINUTE, END_MINUTE], ["water", 0, CAN_CAPACITY], ["coins", 0, 100000000], ["selected_tool", 0, 3]]:
 		if not whole(data.get(spec[0]), spec[1], spec[2]):
@@ -191,7 +195,8 @@ func restore(data: Variant) -> bool:
 	for value: Variant in pos:
 		if not (value is float or value is int) or not is_finite(float(value)):
 			return false
-	if pos[0] < 8 or pos[0] > Layout.FARM_SIZE.x - 8 or pos[1] < 16 or pos[1] > Layout.FARM_SIZE.y:
+	var map_size: Vector2i = Layout.FARM_SIZE if saved_area == "farm" else Layout.SQUARE_SIZE
+	if pos[0] < 8 or pos[0] > map_size.x - 8 or pos[1] < 16 or pos[1] > map_size.y:
 		return false
 	var records: Variant = data.get("beds")
 	if not records is Array or records.size() != beds.size():
@@ -222,6 +227,7 @@ func restore(data: Variant) -> bool:
 	inventory = restored_inventory
 	selected_tool = int(data.selected_tool)
 	player_position = Vector2(float(pos[0]), float(pos[1]))
+	area = saved_area
 	return true
 
 func save_file(path: String) -> Error:
