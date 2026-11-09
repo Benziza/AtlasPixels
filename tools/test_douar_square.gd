@@ -38,17 +38,45 @@ func run_tests() -> void:
 	camera.limit_right = Layout.SQUARE_SIZE.x
 	camera.limit_bottom = Layout.SQUARE_SIZE.y
 	await settle()
-	expect(square.get_node("Ground").get_used_cells().size() == 32 * 24, "Square ground is incomplete")
+	var map_cells := Layout.SQUARE_SIZE / Layout.TILE_SIZE
+	expect(square.get_node("Ground").get_used_cells().size() == map_cells.x * map_cells.y, "Square ground is incomplete")
+	expect(square.get_meta("map_size_pixels") == Layout.SQUARE_SIZE, "Square dimensions disagree with camera/save bounds")
 	expect(square.get_node("AreaSign/Name").text == "ساحة الدوار", "Square name is not localized")
 	expect(square.get_node("DepthSort/Hanout/Artwork/SignPlate/Name").text == "الحانوت", "Square shop sign is not localized")
+	for sign in [["Cafe", "القهوة"], ["Greengrocer", "مول الخضرة"]]:
+		var label: Label = square.get_node("DepthSort/" + sign[0] + "/Artwork/Name")
+		expect(label.text == sign[1], "New shop sign is not localized: " + sign[0])
+		var text_width := label.get_theme_font("font").get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, label.get_theme_font_size("font_size")).x
+		expect(text_width <= label.size.x and label.get_visible_line_count() >= label.get_line_count(), "New shop sign is clipped: " + sign[0])
+	var player_home_copies := 0
+	for body in square.get_node("DepthSort").get_children():
+		var artwork: Sprite2D = body.get_node_or_null("Artwork")
+		if body.get_meta("pattern", "") == "farmhouse":
+			player_home_copies += 1
+		elif artwork != null and artwork.texture is AtlasTexture:
+			var texture: AtlasTexture = artwork.texture
+			if texture.atlas.resource_path == "res://assets/tilesets/buildings.png" and texture.region.intersects(Rect2(0, 0, 256, 224)):
+				player_home_copies += 1
+	expect(player_home_copies == 0, "The player's unique farmhouse was duplicated in the village")
+	var blue: Sprite2D = square.get_node("DepthSort/NeighborBlue/Artwork")
+	var earth: Sprite2D = square.get_node("DepthSort/NeighborEarth/Artwork")
+	expect(blue.texture.resource_path != earth.texture.resource_path, "Neighbor houses reuse the same artwork")
 	expect(can_stand(player.position), "Square spawn overlaps an obstacle")
-	expect(not can_stand(Vector2(-8, 416)), "Square has no western boundary")
-	var house: StaticBody2D = square.get_node("DepthSort/House")
-	var footprint: Rect2 = house.get_meta("footprint_local")
-	expect(not can_stand(house.position + footprint.get_center() + Vector2(0, 8)), "House has no solid footprint")
-	var targets := {Vector2i(32, 26): true, Vector2i(47, 30): true, Vector2i(36, 18): true, Vector2i(13, 19): true, Vector2i(2, 26): true}
-	var queue: Array[Vector2i] = [Vector2i(7, 26)]
-	var seen := {Vector2i(7, 26): true}
+	expect(not can_stand(Vector2(-8, Layout.SQUARE_SPAWN.y)), "Square has no western boundary")
+	for name_ in ["Hanout", "NeighborBlue", "NeighborEarth", "Cafe", "Greengrocer", "Well", "BreadOven", "Fountain"]:
+		var body: StaticBody2D = square.get_node("DepthSort/" + name_)
+		var footprint: Rect2 = body.get_meta("footprint_local")
+		expect(not can_stand(body.position + footprint.get_center() + Vector2(0, 8)), "Landmark has no solid footprint: " + name_)
+	expect(not can_stand(Vector2(400, 864)) and not can_stand(Vector2(1000, 864)), "Unbridged village saqya is walkable")
+	expect(can_stand(Vector2(656, 864)), "Village footbridge is blocked")
+	# Real player-sized physics queries must reach every entrance and the bridge.
+	var targets: Dictionary = {}
+	for point in [Vector2i(208, 336), Vector2i(448, 336), Vector2i(992, 304), Vector2i(144, 816), Vector2i(960, 784), Vector2i(1136, 448), Vector2i(640, 560), Vector2i(656, 880), Vector2i(32, 496)]:
+		targets[point / 16] = true
+	var start := Vector2i(Layout.SQUARE_SPAWN) / 16
+	var queue: Array[Vector2i] = [start]
+	var seen := {start: true}
+	var grid_size := Layout.SQUARE_SIZE / 16
 	var index := 0
 	while index < queue.size() and not targets.is_empty():
 		var cell := queue[index]
@@ -56,7 +84,7 @@ func run_tests() -> void:
 		targets.erase(cell)
 		for offset in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 			var next: Vector2i = cell + offset
-			if next.x < 1 or next.y < 1 or next.x >= 64 or next.y >= 48 or seen.has(next):
+			if next.x < 1 or next.y < 1 or next.x >= grid_size.x or next.y >= grid_size.y or seen.has(next):
 				continue
 			seen[next] = true
 			if can_stand(Vector2(next * 16)):
