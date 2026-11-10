@@ -64,6 +64,20 @@ func run_tests() -> void:
 	await settle(15)
 	game.state.selected_tool = 2
 	expect(game.use_tool(Vector2i(16, 9)), "Could not water before travel")
+	# Seeds remain available at the farm's hanout after the village shop renovation.
+	game.player.position = game.markers.hanout + Vector2(0, 20)
+	await settle(15)
+	game.interact()
+	expect(game.paused and is_instance_valid(game.hud.modal), "Farm hanout did not open")
+	game.menu_action("buy_mint")
+	expect(game.state.coins == 75 and game.state.inventory.mint_seed == 18, "Farm shop purchase failed")
+	game.close_menu()
+	var to_douar: StaticBody2D = game.get_node("DepthSort/ToDouar")
+	expect(to_douar.get_node("Name").text == "ساحة الدوار" and not to_douar.get_node("Artwork").flip_h, "Farm sign is not localized or points away from the douar")
+	expect(not can_stand(to_douar.position + Vector2(0, 8)), "Farm sign post has no collision")
+	var sign_label: Label = to_douar.get_node("Name")
+	var sign_width := sign_label.get_theme_font("font").get_string_size(sign_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, sign_label.get_theme_font_size("font_size")).x
+	expect(sign_width <= sign_label.size.x and sign_label.get_visible_line_count() == sign_label.get_line_count(), "Douar direction text is clipped")
 	game.player.position = Layout.FARM_RETURN
 	await settle()
 	var clock_rect: Rect2 = game.hud.clock_label.get_global_rect()
@@ -78,6 +92,7 @@ func run_tests() -> void:
 	expect(game.hud.clock_label.get_global_rect() == clock_rect, "Travel moved the HUD")
 	expect(can_stand(Vector2(800, 240)), "Hidden farm collisions still block the square")
 	expect(can_stand(Layout.SQUARE_SPAWN), "Hidden farm saqya still blocks the renovated square entrance")
+	expect(can_stand(to_douar.position + Vector2(0, 8)), "Hidden farm sign collision is still active in the square")
 	game.player.position = Layout.SQUARE_SPAWN
 	expect(game.context_hint() == tr("Walk west to return to the farm."), "Return hint missed the renovated entrance")
 	var seed_count: int = game.state.inventory.mint_seed
@@ -89,13 +104,12 @@ func run_tests() -> void:
 	await settle(15)
 	game.interact()
 	expect(game.state.water == 40, "Square well did not refill the can")
-	game.player.position = game.square_markers.hanout + Vector2(0, 20)
+	game.player.position = game.square_markers.bakery + Vector2(0, 20)
 	await settle(15)
+	expect(game.context_hint() == tr("E  /  Bakery"), "Bakery hint still advertises the old hanout")
 	game.interact()
-	expect(game.paused and is_instance_valid(game.hud.modal), "Square hanout did not open")
-	game.menu_action("buy_mint")
-	expect(game.state.coins == 75 and game.state.inventory.mint_seed == seed_count + 5, "Square shop did not use the shared inventory")
-	game.close_menu()
+	expect(not game.paused and game.hud.toast_label.text == tr("Fresh khobz is baked here every morning."), "Bakery interaction opens the old seed shop")
+	expect(game.state.coins == 75 and game.state.inventory.mint_seed == seed_count, "Bakery greeting changed the shared inventory")
 	# Save beyond the old 1024px square boundary, then reload the actual file.
 	game.player.position = Vector2(1200, 512)
 	expect(game.save_progress(), "Square progress could not be saved")
@@ -131,15 +145,23 @@ func run_tests() -> void:
 	expect(game.current_area == "farm" and game.state.day == day + 1 and not game.transitioning, "02:00 in the square did not return home exactly once")
 	expect(game.player.position == game.get_node("PlayerSpawn").position, "Overnight return missed the home spawn")
 	expect(game.state.beds[Vector2i(16, 9)].growth == 1 and not game.state.beds[Vector2i(16, 9)].watered, "Travel disrupted daily crop growth")
-	# The former entrance is now inside the oven; old saves must recover safely.
+	# Old saves at the removed oven now resume on the cleared ground.
 	game.activate_area("douar", Vector2(112, 416))
 	game.save_progress()
 	game.queue_free()
 	await settle()
 	game = make_game()
 	await settle(6)
-	expect(game.current_area == "douar" and game.player.position == game.square.get_node("PlayerSpawn").position, "Blocked square spawn did not recover at the square entrance")
+	expect(game.current_area == "douar" and game.player.position == Vector2(112, 416) and can_stand(game.player.position), "Cleared oven site did not preserve a saved position")
 	expect(game.state.inventory == saved.inventory and game.state.coins == saved.coins, "Renovating the village lost saved inventory or money")
+	# A genuinely blocked save must still recover at the area entrance.
+	game.player.position = Vector2(160, 224)
+	game.save_progress()
+	game.queue_free()
+	await settle()
+	game = make_game()
+	await settle(6)
+	expect(game.current_area == "douar" and game.player.position == Layout.SQUARE_SPAWN, "Blocked bakery save did not recover at the square entrance")
 	var invalid: Dictionary = game.state.to_data().duplicate(true)
 	var validator := FarmState.new()
 	validator.initialize(game.initial_beds)

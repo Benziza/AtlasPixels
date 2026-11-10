@@ -41,10 +41,9 @@ func run_tests() -> void:
 	var map_cells := Layout.SQUARE_SIZE / Layout.TILE_SIZE
 	expect(square.get_node("Ground").get_used_cells().size() == map_cells.x * map_cells.y, "Square ground is incomplete")
 	expect(square.get_meta("map_size_pixels") == Layout.SQUARE_SIZE, "Square dimensions disagree with camera/save bounds")
-	expect(square.get_node("AreaSign/Name").text == "ساحة الدوار", "Square name is not localized")
-	expect(square.get_node("DepthSort/Hanout/Artwork/SignPlate/Name").text == "الحانوت", "Square shop sign is not localized")
-	for sign in [["Cafe", "القهوة"], ["Greengrocer", "مول الخضرة"]]:
-		var label: Label = square.get_node("DepthSort/" + sign[0] + "/Artwork/Name")
+	expect(not square.has_node("AreaSign") and not square.has_node("DepthSort/Hanout") and not square.has_node("DepthSort/BreadOven"), "Old square signage, hanout or oven remains")
+	for sign in [["Bakery/Name", "المخبزة"], ["ToFarm/Name", "الفيرمة"], ["Cafe/Artwork/Name", "القهوة"], ["Greengrocer/Artwork/Name", "مول الخضرة"]]:
+		var label: Label = square.get_node("DepthSort/" + sign[0])
 		expect(label.text == sign[1], "New shop sign is not localized: " + sign[0])
 		var text_width := label.get_theme_font("font").get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, label.get_theme_font_size("font_size")).x
 		expect(text_width <= label.size.x and label.get_visible_line_count() >= label.get_line_count(), "New shop sign is clipped: " + sign[0])
@@ -63,10 +62,16 @@ func run_tests() -> void:
 	expect(blue.texture.resource_path != earth.texture.resource_path, "Neighbor houses reuse the same artwork")
 	expect(can_stand(player.position), "Square spawn overlaps an obstacle")
 	expect(not can_stand(Vector2(-8, Layout.SQUARE_SPAWN.y)), "Square has no western boundary")
-	for name_ in ["Hanout", "NeighborBlue", "NeighborEarth", "Cafe", "Greengrocer", "Well", "BreadOven", "Fountain"]:
+	for name_ in ["Bakery", "NeighborBlue", "NeighborEarth", "Cafe", "Greengrocer", "Well", "Fountain"]:
 		var body: StaticBody2D = square.get_node("DepthSort/" + name_)
 		var footprint: Rect2 = body.get_meta("footprint_local")
 		expect(not can_stand(body.position + footprint.get_center() + Vector2(0, 8)), "Landmark has no solid footprint: " + name_)
+	for point in [Vector2(112, 384), Vector2(112, 416), Vector2(160, 416)]:
+		expect(can_stand(point), "Removed oven still blocks walking: " + str(point))
+	var route: StaticBody2D = square.get_node("DepthSort/ToFarm")
+	expect(route.get_node("Artwork").flip_h, "Farm sign points away from the western exit")
+	expect(not can_stand(route.position + Vector2(0, 8)), "Sign post has no solid base")
+	expect(can_stand(route.position + Vector2(32, 8)), "Sign board blocks the path beside its post")
 	expect(not can_stand(Vector2(400, 864)) and not can_stand(Vector2(1000, 864)), "Unbridged village saqya is walkable")
 	expect(can_stand(Vector2(656, 864)), "Village footbridge is blocked")
 	# Real player-sized physics queries must reach every entrance and the bridge.

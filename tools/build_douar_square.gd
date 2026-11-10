@@ -76,10 +76,11 @@ func prop(name_: String, pattern: String, cell: Vector2i, solid: bool = true) ->
 		rectangle(body, local_rect)
 	return body
 
-func village_prop(name_: String, filename: String, cell: Vector2i, footprints: Array[Rect2]) -> StaticBody2D:
+func village_prop(name_: String, filename: String, cell: Vector2i, footprints: Array[Rect2], display_size: Vector2 = Vector2.ZERO) -> StaticBody2D:
 	var texture := load("res://assets/village/" + filename) as Texture2D
 	assert(texture != null)
-	var anchor := Vector2(texture.get_width() / 2.0, texture.get_height() - 2)
+	var size_ := texture.get_size() if display_size == Vector2.ZERO else display_size
+	var anchor := Vector2(size_.x / 2.0, size_.y - 2)
 	var body := StaticBody2D.new()
 	body.name = name_
 	body.position = Vector2(cell * 32) + anchor
@@ -92,6 +93,7 @@ func village_prop(name_: String, filename: String, cell: Vector2i, footprints: A
 	sprite.centered = false
 	sprite.position = -anchor
 	sprite.texture = texture
+	sprite.scale = size_ / texture.get_size()
 	own(body, sprite)
 	for footprint in footprints:
 		rectangle(body, Rect2(footprint.position - anchor, footprint.size))
@@ -153,7 +155,9 @@ func build() -> void:
 	depth.name = "DepthSort"
 	depth.y_sort_enabled = true
 	own(scene_root, depth)
-	var shop := prop("Hanout", "hanout", Vector2i(2, 2))
+	var bakery := village_prop("Bakery", "bakery.tres", Vector2i(2, 2), [Rect2(8, 100, 176, 122)], Vector2(192, 224))
+	bakery.position.x += 16
+	text_label(bakery, "Name", "Bakery", Rect2(-50, -138, 92, 28), 14)
 	village_prop("NeighborBlue", "neighbor-house-blue.png", Vector2i(26, 2), [Rect2(4, 100, 76, 100), Rect2(80, 96, 124, 88), Rect2(118, 184, 102, 22)])
 	village_prop("NeighborEarth", "neighbor-house-earth.png", Vector2i(2, 17), [Rect2(6, 94, 70, 138), Rect2(28, 145, 174, 90)])
 	var cafe := village_prop("Cafe", "village-cafe.png", Vector2i(28, 17), [Rect2(6, 94, 242, 110)])
@@ -161,7 +165,6 @@ func build() -> void:
 	text_label(cafe.get_node("Artwork"), "Name", "Village cafe", Rect2(32, 72, 76, 22), 14)
 	text_label(grocer.get_node("Artwork"), "Name", "Greengrocer", Rect2(24, 84, 76, 18), 11)
 	prop("Well", "well", Vector2i(34, 10))
-	village_prop("BreadOven", "bread-oven.png", Vector2i(2, 10), [Rect2(8, 66, 96, 44)])
 	village_prop("Fountain", "fountain.png", Vector2i(18, 13), [Rect2(8, 44, 112, 66)])
 	for x in range(0, map_cells.x, 2):
 		prop("Channel%d" % x, "saqya_horizontal", Vector2i(x, 26), false)
@@ -195,34 +198,12 @@ func build() -> void:
 		prop("TomatoFence%d" % x, "fence_horizontal", Vector2i(x, 20))
 	prop("MintSideFence", "fence_vertical", Vector2i(17, 22))
 	prop("TomatoSideFence", "fence_vertical", Vector2i(22, 22))
-	var sign := ColorRect.new()
-	sign.name = "SignPlate"
-	sign.layout_direction = Control.LAYOUT_DIRECTION_LTR
-	sign.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	own(shop.get_node("Artwork"), sign)
-	sign.position = Vector2(76, 98)
-	sign.size = Vector2(72, 14)
-	var texture: AtlasTexture = shop.get_node("Artwork").texture
-	sign.color = texture.atlas.get_image().get_pixelv(Vector2i(texture.region.position) + Vector2i(76, 110))
-	text_label(sign, "Name", "The hanout", Rect2(0, -3, 72, 20), 14)
-	var area_sign := ColorRect.new()
-	area_sign.name = "AreaSign"
-	area_sign.layout_direction = Control.LAYOUT_DIRECTION_LTR
-	area_sign.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	area_sign.color = Color("a64d26")
-	own(scene_root, area_sign)
-	# World labels stay below actors, so they never conceal a walking player.
-	scene_root.move_child(area_sign, depth.get_index())
-	area_sign.position = Vector2(256, 336)
-	area_sign.size = Vector2(176, 36)
-	var paper := ColorRect.new()
-	paper.layout_direction = Control.LAYOUT_DIRECTION_LTR
-	paper.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	paper.color = Color("ffda91")
-	own(area_sign, paper)
-	paper.position = Vector2(3, 3)
-	paper.size = Vector2(170, 30)
-	text_label(area_sign, "Name", "Douar square", Rect2(4, 2, 168, 32), 20)
+	var route_sign: StaticBody2D = load("res://maps/route_sign.tscn").instantiate()
+	route_sign.name = "ToFarm"
+	route_sign.position = Vector2(80, 440)
+	route_sign.destination = "Farm"
+	route_sign.direction = -1
+	own(depth, route_sign)
 	var boundary := StaticBody2D.new()
 	boundary.name = "MapBoundary"
 	boundary.collision_mask = 2

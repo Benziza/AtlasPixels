@@ -8,18 +8,19 @@
 [ext_resource type="Texture2D" path="res://assets/village/neighbor-house-earth.png" id="6_k5wii"]
 [ext_resource type="Texture2D" path="res://assets/village/village-cafe.png" id="7_3ioe2"]
 [ext_resource type="Texture2D" path="res://assets/village/greengrocer.png" id="8_7fwv3"]
-[ext_resource type="Texture2D" path="res://assets/village/bread-oven.png" id="9_m5g58"]
 [ext_resource type="Texture2D" path="res://assets/village/fountain.png" id="10_il5hv"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/saqya.png" id="11_o75qs"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/vegetation.png" id="12_voj1i"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/crops_and_props.png" id="13_pfhld"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rpwdd"]
-atlas = ExtResource("4_iqwgo")
-region = Rect2(288, 0, 224, 224)
+[ext_resource type="Texture2D" path="res://assets/village/bakery.tres" id="BakeryTexture"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_voq42"]
-size = Vector2(172, 117.88)
+[ext_resource type="PackedScene" path="res://maps/route_sign.tscn" id="RouteSignScene"]
+
+[ext_resource type="Script" path="res://maps/route_sign.gd" id="RouteSignScript"]
+
+[sub_resource type="RectangleShape2D" id="BakeryFootprint"]
+size = Vector2(176, 122)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pjt13"]
 size = Vector2(76, 100)
@@ -48,9 +49,6 @@ region = Rect2(544, 0, 96, 96)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rsocx"]
 size = Vector2(56, 32)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8xmqq"]
-size = Vector2(96, 44)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6r0vb"]
 size = Vector2(112, 66)
@@ -527,82 +525,39 @@ tile_map_data = PackedByteArray("AAAQAAsAAAADAAMAAAARAAsAAAADAAMAAAASAAsAAAADAAM
 tile_set = ExtResource("2_rji3v")
 collision_enabled = false
 
-[node name="AreaSign" type="ColorRect" parent="." unique_id=673525754]
-offset_left = 256.0
-offset_top = 336.0
-offset_right = 432.0
-offset_bottom = 372.0
-layout_direction = 2
-mouse_filter = 2
-color = Color(0.6509804, 0.3019608, 0.14901961, 1)
-
-[node name="@ColorRect@48" type="ColorRect" parent="AreaSign" unique_id=1713424754]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = 173.0
-offset_bottom = 33.0
-layout_direction = 2
-mouse_filter = 2
-color = Color(1, 0.85490197, 0.5686275, 1)
-
-[node name="Name" type="Label" parent="AreaSign" unique_id=501839689]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 2.0
-offset_right = 172.0
-offset_bottom = 34.0
-layout_direction = 2
-theme_override_colors/font_color = Color(0.35686275, 0.16862746, 0.09803922, 1)
-theme_override_fonts/font = ExtResource("3_384wa")
-theme_override_font_sizes/font_size = 20
-text = "Douar square"
-horizontal_alignment = 1
-vertical_alignment = 1
-text_direction = 2
-language = "ar_MA"
-
 [node name="DepthSort" type="Node2D" parent="." unique_id=1499448341]
 y_sort_enabled = true
 
-[node name="Hanout" type="StaticBody2D" parent="DepthSort" unique_id=1017963339 groups=["square_obstacles"]]
+[node name="Bakery" type="StaticBody2D" parent="DepthSort" groups=["square_obstacles"]]
 position = Vector2(176, 286)
 collision_mask = 2
-metadata/pattern = "hanout"
-metadata/footprint_local = Rect2(-86, -117.88, 172, 117.88)
+metadata/pattern = "bakery"
+metadata/footprint_local = Rect2(-88, -122, 176, 122)
 
-[node name="Artwork" type="Sprite2D" parent="DepthSort/Hanout" unique_id=806385839]
-position = Vector2(-112, -222)
-texture = SubResource("AtlasTexture_rpwdd")
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Bakery"]
+position = Vector2(-96, -222)
+scale = Vector2(0.21238938, 0.20895523)
+texture = ExtResource("BakeryTexture")
 centered = false
 
-[node name="SignPlate" type="ColorRect" parent="DepthSort/Hanout/Artwork" unique_id=1018584999]
-offset_left = 76.0
-offset_top = 98.0
-offset_right = 148.0
-offset_bottom = 112.0
-layout_direction = 2
-mouse_filter = 2
-color = Color(0.9490196, 0.76862746, 0.5254902, 0.99215686)
+[node name="@CollisionShape2D@2" type="CollisionShape2D" parent="DepthSort/Bakery"]
+position = Vector2(0, -61)
+shape = SubResource("BakeryFootprint")
 
-[node name="Name" type="Label" parent="DepthSort/Hanout/Artwork/SignPlate" unique_id=1856864557]
-layout_mode = 0
-offset_top = -3.0
-offset_right = 72.0
-offset_bottom = 20.0
+[node name="Name" type="Label" parent="DepthSort/Bakery"]
+offset_left = -50.0
+offset_top = -138.0
+offset_right = 42.0
+offset_bottom = -110.0
 layout_direction = 2
 theme_override_colors/font_color = Color(0.35686275, 0.16862746, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("3_384wa")
 theme_override_font_sizes/font_size = 14
-text = "The hanout"
+text = "Bakery"
 horizontal_alignment = 1
 vertical_alignment = 1
 text_direction = 2
 language = "ar_MA"
-
-[node name="@CollisionShape2D@2" type="CollisionShape2D" parent="DepthSort/Hanout" unique_id=555273837]
-position = Vector2(0, -58.94)
-shape = SubResource("RectangleShape2D_voq42")
 
 [node name="NeighborBlue" type="StaticBody2D" parent="DepthSort" unique_id=63165765 groups=["square_obstacles"]]
 position = Vector2(944, 270)
@@ -720,21 +675,6 @@ centered = false
 [node name="@CollisionShape2D@10" type="CollisionShape2D" parent="DepthSort/Well" unique_id=1276864499]
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_rsocx")
-
-[node name="BreadOven" type="StaticBody2D" parent="DepthSort" unique_id=2091006026 groups=["square_obstacles"]]
-position = Vector2(120, 430)
-collision_mask = 2
-metadata/pattern = "bread-oven"
-metadata/footprint_local = Rect2(-48, -44, 96, 44)
-
-[node name="Artwork" type="Sprite2D" parent="DepthSort/BreadOven" unique_id=249195698]
-position = Vector2(-56, -110)
-texture = ExtResource("9_m5g58")
-centered = false
-
-[node name="@CollisionShape2D@11" type="CollisionShape2D" parent="DepthSort/BreadOven" unique_id=1600628058]
-position = Vector2(0, -22)
-shape = SubResource("RectangleShape2D_8xmqq")
 
 [node name="Fountain" type="StaticBody2D" parent="DepthSort" unique_id=555493492 groups=["square_obstacles"]]
 position = Vector2(640, 526)
@@ -1828,6 +1768,14 @@ shape = SubResource("RectangleShape2D_7sljm")
 [node name="@CollisionShape2D@14" type="CollisionShape2D" parent="ChannelWater" unique_id=588576747]
 position = Vector2(992, 864)
 shape = SubResource("RectangleShape2D_i5g4m")
+
+[node name="ToFarm" type="StaticBody2D" parent="DepthSort" instance=ExtResource("RouteSignScene")]
+texture_filter = 1
+position = Vector2(80, 440)
+collision_mask = 2
+script = ExtResource("RouteSignScript")
+destination = "Farm"
+direction = -1
 
 [node name="MapBoundary" type="StaticBody2D" parent="." unique_id=1666832784]
 collision_mask = 2
