@@ -381,3 +381,57 @@ msgstr "دور فساحة الدوار، ولا رجع فالطريق على ل�
 
 msgid "Planting is only available on the farm."
 msgstr "الزرع كيتدار غير فالفيرمة."
+
+msgid "Reception"
+msgstr "الاستقبال"
+
+msgid "Welcome to the caidat. Reception is on the left."
+msgstr "مرحبا بيك فالقيادة. الاستقبال على اليسار."
+
+msgid "Welcome to the hospital. Reception is on the left."
+msgstr "مرحبا بيك فالمستشفى. الاستقبال على اليسار."
+
+msgid "The exit is at the bottom of the room."
+msgstr "الخروج من الباب اللي لتحت."
+
+msgid "Walk through the door to return outside."
+msgstr "دوز من الباب باش تخرج لبرا."
+
+msgid "E  /  Reception"
+msgstr "E  /  الاستقبال"
+
+msgid "The reception register and stamps are ready for the douar's paperwork."
+msgstr "دفتر الاستقبال والطوابع واجدين لوثائق الدوار."
+
+msgid "E  /  Archives"
+msgstr "E  /  الأرشيف"
+
+msgid "The douar's files are sorted in the archive cabinets."
+msgstr "ملفات الدوار مرتبين فالخزانات ديال الأرشيف."
+
+msgid "E  /  Caid's office"
+msgstr "E  /  مكتب القايد"
+
+msgid "The caid's office: a ledger, folders and seats for visitors."
+msgstr "مكتب القايد: دفتر، ملفات وكراسي للزوار."
+
+msgid "The hospital register is here. The waiting chairs are beside the entrance."
+msgstr "دفتر المستشفى هنا. كراسي الانتظار حدا المدخل."
+
+msgid "E  /  Consultation"
+msgstr "E  /  الفحص"
+
+msgid "A consultation desk and examination couch, with a curtain for privacy."
+msgstr "مكتب وسرير للفحص، مع ستار للخصوصية."
+
+msgid "E  /  Care room"
+msgstr "E  /  قاعة العلاجات"
+
+msgid "Clean beds and bedside cabinets are ready in the care room."
+msgstr "سراير نقيين وخزانات صغار واجدين فقاعة العلاجات."
+
+msgid "E  /  Medical supplies"
+msgstr "E  /  معدات العلاجات"
+
+msgid "Fresh towels and a closed medical kit are stored on the trolley."
+msgstr "فوطات نقيين وحقيبة طبية مسدودة فوق العربة."

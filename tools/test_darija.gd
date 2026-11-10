@@ -47,7 +47,7 @@ func test_catalog() -> void:
 	# Cover literal tr() calls as well as the dynamically translated crop names.
 	var calls := RegEx.new()
 	calls.compile('tr\\("((?:[^"\\\\]|\\\\.)*)"\\)')
-	for path in ["res://maps/farm_state.gd", "res://maps/farm_game.gd", "res://maps/farm_hud.gd", "res://maps/douar_square.gd", "res://maps/cafe_interior.gd", "res://maps/route_sign.gd", "res://maps/civic_quarter.gd"]:
+	for path in ["res://maps/farm_state.gd", "res://maps/farm_game.gd", "res://maps/farm_hud.gd", "res://maps/douar_square.gd", "res://maps/cafe_interior.gd", "res://maps/route_sign.gd", "res://maps/civic_quarter.gd", "res://maps/civic_interior.gd"]:
 		for call in calls.search_all(FileAccess.get_file_as_string(path)):
 			var message: String = JSON.parse_string('"' + call.get_string(1) + '"')
 			expect(not catalog.get_message(message).is_empty(), "Untranslated runtime message: " + message)

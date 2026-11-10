@@ -1,0 +1,11 @@
+Use case: stylized-concept
+Asset type: one production transparent sprite atlas for AtlasPixels Godot RPG.
+Input image 1 is the approved caidat room design reference. Input image 2 is the existing cafe furniture atlas, the exact pixel art visual style reference.
+Create ONE sprite sheet, 3 columns by 2 rows, six isolated objects, each centered entirely within its equal cell with generous transparent gutters. No room, floor, walls or labels. True transparent RGBA background. All sprites use the same straight-on top-down 3/4 orthographic RPG view, facing south; crisp chunky pixels, dark brown outlines, warm carved wood and turquoise/cream accents. Match the objects in reference image 1 and coarse sprite detail of image 2.
+ROW 1 left: caid's wooden desk with green writing pad, open ledger, stacked folders, wooden stamp and pen holder; desk only, no chair.
+ROW 1 middle: tall carved wood archive cabinet filled with colored binders, tied paper bundles and storage boxes.
+ROW 1 right: separate desktop paperwork cluster, open register with stacked papers, wooden stamp and inkpad, no desk.
+ROW 2 left: standing Moroccan flag on gold pole and round base, red flag with green five-point star.
+ROW 2 middle: square wall noticeboard with pinned cream paper notices, no legible text.
+ROW 2 right: low horizontal wood office partition railing, two end posts and three arched slots.
+Keep objects fully separate, no overlap, shadows only tiny contact shadows integrated with object alpha. No text, numbers, cell borders, labels, watermark or background. This must be a usable game atlas, not a preview room.
