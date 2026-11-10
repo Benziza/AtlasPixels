@@ -271,6 +271,18 @@ msgstr "%s %d"
 msgid "Douar square"
 msgstr "ساحة الدوار"
 
+msgid "Farm"
+msgstr "الفيرمة"
+
+msgid "Bakery"
+msgstr "المخبزة"
+
+msgid "E  /  Bakery"
+msgstr "E  /  المخبزة"
+
+msgid "Fresh khobz is baked here every morning."
+msgstr "الخبز سخون كيتوجد هنا كل صباح."
+
 msgid "Village cafe"
 msgstr "القهوة"
 

@@ -5,6 +5,7 @@ const FarmHUD = preload("res://maps/farm_hud.gd")
 const Layout = preload("res://maps/world_layout.gd")
 const Square = preload("res://maps/douar_square.tscn")
 const Cafe = preload("res://maps/cafe_interior.tscn")
+const RouteSign = preload("res://maps/route_sign.tscn")
 const TILE := 32
 const REACH := 58.0
 const SAVE_PATH := "user://farm-save.json"
@@ -80,7 +81,7 @@ func _ready() -> void:
 		player.position = state.player_position
 		call_deferred("validate_spawn")
 	markers = collect_markers($DepthSort, ["farmhouse", "hanout", "well"])
-	square_markers = collect_markers(square.get_node("DepthSort"), ["hanout", "well"])
+	square_markers = collect_markers(square.get_node("DepthSort"), ["bakery", "well"])
 	square_markers["cafe"] = Layout.CAFE_DOOR
 	daylight = CanvasModulate.new()
 	daylight.name = "Daylight"
@@ -96,8 +97,10 @@ func _ready() -> void:
 	hud.tool_selected.connect(select_tool)
 	hud.action_requested.connect(menu_action)
 	localize_shop_sign()
-	add_route_sign($FarmExtension, Vector2(1344, 312), tr("To the douar"), 1)
-	add_route_sign(square, Vector2(256, 380), tr("To the farm"), -1)
+	var route_sign := RouteSign.instantiate()
+	route_sign.name = "ToDouar"
+	route_sign.position = Vector2(1392, 344)
+	$DepthSort.add_child(route_sign)
 	activate_area(state.area, state.player_position if loaded else $PlayerSpawn.position)
 	refresh_all()
 	if save_blocked:
@@ -115,21 +118,6 @@ func collect_markers(parent: Node, patterns: Array) -> Dictionary:
 			var rect: Rect2 = body.get_meta("footprint_local")
 			result[pattern] = body.position + Vector2(rect.get_center().x, rect.end.y + 14)
 	return result
-
-func add_route_sign(parent: Node2D, point: Vector2, text: String, direction: int) -> void:
-	var sign: Control = hud.frame(parent, Rect2(point, Vector2(192, 42)))
-	sign.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var label: Label = hud.place_label(sign, text, Rect2(12 if direction > 0 else 40, 6, 140, 30), 18)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	# Draw the arrow in world space: its direction is independent of Arabic BiDi.
-	var arrow := Polygon2D.new()
-	arrow.polygon = PackedVector2Array([Vector2(-10, -4), Vector2(0, -4), Vector2(0, -10), Vector2(10, 0), Vector2(0, 10), Vector2(0, 4), Vector2(-10, 4)])
-	arrow.color = FarmHUD.INK
-	arrow.scale.x = direction
-	arrow.position = Vector2(168 if direction > 0 else 24, 21)
-	sign.add_child(arrow)
-	if parent.has_node("DepthSort"):
-		parent.move_child(sign, parent.get_node("DepthSort").get_index())
 
 func activate_area(area: String, point: Vector2) -> void:
 	assert(Layout.area_size(area) != Vector2i.ZERO, "Unknown area")
@@ -436,6 +424,8 @@ func interact() -> void:
 		open_sleep()
 	elif near_marker("hanout", 58):
 		open_shop()
+	elif near_marker("bakery", 58):
+		show_toast(tr("Fresh khobz is baked here every morning."), 5)
 	elif water_nearby():
 		refill_can()
 	elif current_area != "farm":
@@ -477,6 +467,8 @@ func context_hint() -> String:
 		return tr("E  /  Sleep until tomorrow")
 	if near_marker("hanout", 58):
 		return tr("E  /  Hanout: seeds and harvest")
+	if near_marker("bakery", 58):
+		return tr("E  /  Bakery")
 	if current_area == "farm" and state.beds.has(target):
 		return state.describe(target) if can_reach(target) else tr("Walk closer to this bed")
 	if water_nearby():

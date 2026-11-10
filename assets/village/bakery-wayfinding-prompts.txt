@@ -1,0 +1,17 @@
+Generated with the built-in image_gen tool; blank plaques are labeled at runtime in Godot.
+
+BAKERY
+Use case: precise-object-edit / background-extraction.
+Image 1 is the approved AtlasPixels village redesign, a STYLE AND SUBJECT REFERENCE. Extract/recreate ONLY its upper-left Moroccan BAKERY as ONE isolated production game sprite, with actual transparent background. Exclude every other map object, all ground, jars outside, signs sidebar, trees and characters.
+Keep the reference bakery's ochre plaster, flat terracotta red roof and corner posts, cream scalloped cloth awning, bread display with round golden khobz on the left and a few upright loaves by the doorway, small wheat decoration and teal wall lantern on the right. Match same orthographic top-down RPG three-quarter view, exact overall silhouette, coarse crisp square pixel clusters and warm palette.
+The building must fit a 192px wide by 224px high logical pixel-art footprint (output may be an integer upscaled image). Full sprite uncropped with modest transparent padding on every side. Roof at top, base straight horizontal at bottom. NO cast ground shadow outside the sprite.
+IMPORTANT: The long shop-name plaque centered ABOVE THE AWNING must be EMPTY clean light warm tan, without any writing. Keep its outlined decorative wood frame and wheat motifs at either end. Leave a wide blank middle of plaque for real Arabic text to be overlaid by the game.
+No text anywhere, no logos, no watermark, no oven outside, no general groceries or sacks. One single complete bakery sprite, not a sheet. True transparent alpha.
+
+DIRECTION SIGN
+Use case: precise-object-edit / background-extraction.
+Image 1 is a reference: the approved AtlasPixels village redesign. Recreate ONLY the upper right sidebar's small wooden direction sign as ONE isolated reusable game prop on a TRUE transparent background.
+A single warm golden wooden arrow-shaped plank pointing RIGHT mounted on ONE dark weathered wooden vertical post. A few square metal nail heads at the corners, dark brown crisp pixel outlines, warm highlighted top edge, simple restrained wood grain. Blank light tan clean central writing area over most of the plank width (the game overlays Arabic text there). No text, no symbols, no internal painted arrow. The silhouette of the plank itself provides the direction, with one pointed right end and squared left end. No grass, rocks, dirt, landscape, shadow plane, frame, presentation background, or any other props.
+Sprite proportions: total sign including post roughly 96 wide x 76 high logical game pixels. Board at top approximately 96x32, post visible below approximately 12x40. Crisp chunky pixel-art style matching reference, orthographic front-facing top-down RPG prop. Center the full prop with small transparent margins. Output may be an enlarged pixel sprite. No lettering whatsoever. One sprite only, no variations, actual transparent alpha.
+
+Cleanup pass: remove all haze, glow and stray pixels outside the wooden sign; preserve the sign and its blank plaque on transparent alpha.
