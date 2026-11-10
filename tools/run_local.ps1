@@ -1,8 +1,10 @@
 param(
     [switch]$Cafe,
+    [switch]$Civic,
     [string]$GodotPath
 )
 $ErrorActionPreference = 'Stop'
+if ($Cafe -and $Civic) { throw 'Choose either -Cafe or -Civic.' }
 $projectPath = Split-Path -Parent $PSScriptRoot
 if (-not $GodotPath) {
     $installed = Get-Command godot, godot4 -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -18,4 +20,5 @@ $importProcess = Start-Process -FilePath $GodotPath -ArgumentList $importArgs -W
 if ($importProcess.ExitCode -ne 0) { throw 'Godot resource import failed.' }
 $gameArgs = @('--path', ('"' + $projectPath + '"'))
 if ($Cafe) { $gameArgs += @('--script', 'res://tools/preview_cafe.gd') }
+if ($Civic) { $gameArgs += @('--script', 'res://tools/preview_civic.gd') }
 Start-Process -FilePath $GodotPath -ArgumentList $gameArgs -WorkingDirectory $projectPath

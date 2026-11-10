@@ -277,6 +277,36 @@ msgstr "الفيرمة"
 msgid "Bakery"
 msgstr "المخبزة"
 
+msgid "Caidat"
+msgstr "القيادة"
+
+msgid "Hospital"
+msgstr "المستشفى"
+
+msgid "Caidat and hospital"
+msgstr "القيادة\nوالمستشفى"
+
+msgid "Welcome! The caidat is on the left and the hospital on the right."
+msgstr "مرحبا! القيادة على ليسر والمستشفى على ليمن."
+
+msgid "Walk north to the caidat and hospital."
+msgstr "طلع فالطريق باش توصل للقيادة والمستشفى."
+
+msgid "Walk south to return to the douar."
+msgstr "هبط فالطريق باش ترجع لساحة الدوار."
+
+msgid "E  /  Caidat"
+msgstr "E  /  القيادة"
+
+msgid "E  /  Hospital"
+msgstr "E  /  المستشفى"
+
+msgid "The local administration. Follow the southern path back to the douar."
+msgstr "هنا القيادة. الطريق اللي لتحت كيرجعك لساحة الدوار."
+
+msgid "The village hospital. Follow the southern path back to the douar."
+msgstr "هنا مستشفى الدوار. الطريق اللي لتحت كيرجعك للساحة."
+
 msgid "E  /  Bakery"
 msgstr "E  /  المخبزة"
 

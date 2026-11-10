@@ -14,10 +14,16 @@ const CAFE_EXIT := Rect2(288, 420, 64, 28)
 # The doorway is on the left side of the cafe's facade, not its center.
 const CAFE_DOOR := Vector2(964, 768)
 const CAFE_RETURN := Vector2(964, 792)
+const CIVIC_SIZE := Vector2i(1024, 768)
+const SQUARE_NORTH_EXIT := Rect2(608, 0, 96, 48)
+const SQUARE_NORTH_RETURN := Vector2(656, 112)
+const CIVIC_EXIT := Rect2(464, 720, 96, 48)
+const CIVIC_SPAWN := Vector2(512, 656)
 
 static func area_size(area: String) -> Vector2i:
 	match area:
 		"farm": return FARM_SIZE
 		"douar": return SQUARE_SIZE
 		"cafe": return CAFE_SIZE
+		"civic": return CIVIC_SIZE
 	return Vector2i.ZERO

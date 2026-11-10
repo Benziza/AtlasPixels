@@ -1,0 +1,478 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://maps/civic_quarter.gd" id="1_2ftep"]
+[ext_resource type="TileSet" path="res://assets/tilesets/moroccan_farm.tres" id="2_joujw"]
+[ext_resource type="Texture2D" path="res://assets/village/caidat.tres" id="3_wsa6m"]
+[ext_resource type="FontFile" path="res://assets/ui/fonts/readex-pro.ttf" id="4_ipf68"]
+[ext_resource type="Texture2D" path="res://assets/village/hospital.tres" id="5_g1jj0"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/vegetation.png" id="6_ehb2p"]
+[ext_resource type="PackedScene" path="res://maps/route_sign.tscn" id="7_pkd45"]
+[ext_resource type="Script" path="res://maps/route_sign.gd" id="8_6b0oj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_58nj0"]
+size = Vector2(280, 140)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_on06k"]
+size = Vector2(136, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lp78c"]
+size = Vector2(280, 132)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_81e76"]
+size = Vector2(120, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0m8q"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oq8da"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybunj"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(160, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0yh1l"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wpl1a"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_amu1o"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1t8s"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(160, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7asc8"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1u5h"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_byynb"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t3x6w"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(160, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5a8s8"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rc6lb"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1jae2"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2wcil"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(160, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hiu2a"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xhxch"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o0kva"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_morw1"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(160, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gb18k"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_laid8"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ocnnw"]
+size = Vector2(26, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mdo2"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(320, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y8ctc"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(320, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_extun"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(320, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjae6"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(320, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdtl0"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(320, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crrrv"]
+atlas = ExtResource("6_ehb2p")
+region = Rect2(320, 64, 32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mryrc"]
+size = Vector2(32, 832)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5rxhj"]
+size = Vector2(32, 832)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ndn8n"]
+size = Vector2(1024, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0lcyu"]
+size = Vector2(1024, 32)
+
+[node name="CivicQuarter" type="Node2D" unique_id=363716593]
+texture_filter = 1
+script = ExtResource("1_2ftep")
+metadata/map_size_pixels = Vector2i(1024, 768)
+
+[node name="Ground" type="TileMapLayer" parent="." unique_id=2046805516]
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAMAAAABAAAAAAABAAEAAAACAAAAAAABAAEAAAADAAAAAAABAAEAAAAEAAAAAAABAAEAAAAFAAAAAAABAAEAAAAGAAAAAAABAAEAAAAHAAAAAAABAAEAAAAIAAAAAAABAAEAAAAJAAAAAAABAAEAAAAKAAAAAAABAAEAAAALAAAAAAABAAEAAAAMAAAAAAABAAEAAAANAAAAAAAAAAMAAAAOAAAAAAABAAEAAAAPAAAAAAABAAEAAAAQAAAAAAABAAEAAAARAAAAAAABAAEAAAASAAAAAAABAAEAAAATAAAAAAABAAEAAAAUAAAAAAABAAEAAAAVAAAAAAABAAEAAAAWAAAAAAABAAEAAAAXAAAAAAABAAEAAAAYAAAAAAABAAEAAAAZAAAAAAABAAEAAAAaAAAAAAAAAAMAAAAbAAAAAAABAAEAAAAcAAAAAAABAAEAAAAdAAAAAAABAAEAAAAeAAAAAAABAAEAAAAfAAAAAAABAAEAAAAAAAEAAAABAAEAAAABAAEAAAABAAEAAAACAAEAAAABAAEAAAADAAEAAAABAAEAAAAEAAEAAAABAAEAAAAFAAEAAAABAAEAAAAGAAEAAAABAAEAAAAHAAEAAAABAAEAAAAIAAEAAAAAAAMAAAAJAAEAAAABAAEAAAAKAAEAAAABAAEAAAALAAEAAAABAAEAAAAMAAEAAAABAAEAAAANAAEAAAABAAEAAAAOAAEAAAABAAEAAAAPAAEAAAABAAEAAAAQAAEAAAABAAEAAAARAAEAAAABAAEAAAASAAEAAAABAAEAAAATAAEAAAABAAEAAAAUAAEAAAABAAEAAAAVAAEAAAAAAAMAAAAWAAEAAAABAAEAAAAXAAEAAAABAAEAAAAYAAEAAAABAAEAAAAZAAEAAAABAAEAAAAaAAEAAAABAAEAAAAbAAEAAAABAAEAAAAcAAEAAAABAAEAAAAdAAEAAAABAAEAAAAeAAEAAAABAAEAAAAfAAEAAAABAAEAAAAAAAIAAAABAAEAAAABAAIAAAABAAEAAAACAAIAAAABAAEAAAADAAIAAAAAAAMAAAAEAAIAAAABAAEAAAAFAAIAAAABAAEAAAAGAAIAAAABAAEAAAAHAAIAAAABAAEAAAAIAAIAAAABAAEAAAAJAAIAAAABAAEAAAAKAAIAAAABAAEAAAALAAIAAAABAAEAAAAMAAIAAAABAAEAAAANAAIAAAABAAEAAAAOAAIAAAABAAEAAAAPAAIAAAABAAEAAAAQAAIAAAAAAAMAAAARAAIAAAABAAEAAAASAAIAAAABAAEAAAATAAIAAAABAAEAAAAUAAIAAAABAAEAAAAVAAIAAAABAAEAAAAWAAIAAAABAAEAAAAXAAIAAAABAAEAAAAYAAIAAAABAAEAAAAZAAIAAAABAAEAAAAaAAIAAAABAAEAAAAbAAIAAAABAAEAAAAcAAIAAAABAAEAAAAdAAIAAAAAAAMAAAAeAAIAAAABAAEAAAAfAAIAAAABAAEAAAAAAAMAAAABAAEAAAABAAMAAAABAAEAAAACAAMAAAABAAEAAAADAAMAAAABAAEAAAAEAAMAAAABAAEAAAAFAAMAAAABAAEAAAAGAAMAAAABAAEAAAAHAAMAAAABAAEAAAAIAAMAAAABAAEAAAAJAAMAAAABAAEAAAAKAAMAAAABAAEAAAALAAMAAAAAAAMAAAAMAAMAAAABAAEAAAANAAMAAAABAAEAAAAOAAMAAAABAAEAAAAPAAMAAAABAAEAAAAQAAMAAAABAAEAAAARAAMAAAABAAEAAAASAAMAAAABAAEAAAATAAMAAAABAAEAAAAUAAMAAAABAAEAAAAVAAMAAAABAAEAAAAWAAMAAAABAAEAAAAXAAMAAAABAAEAAAAYAAMAAAAAAAMAAAAZAAMAAAABAAEAAAAaAAMAAAABAAEAAAAbAAMAAAABAAEAAAAcAAMAAAABAAEAAAAdAAMAAAABAAEAAAAeAAMAAAABAAEAAAAfAAMAAAABAAEAAAAAAAQAAAABAAEAAAABAAQAAAABAAEAAAACAAQAAAABAAEAAAADAAQAAAABAAEAAAAEAAQAAAABAAEAAAAFAAQAAAABAAEAAAAGAAQAAAAAAAMAAAAHAAQAAAABAAEAAAAIAAQAAAABAAEAAAAJAAQAAAABAAEAAAAKAAQAAAABAAEAAAALAAQAAAABAAEAAAAMAAQAAAABAAEAAAANAAQAAAABAAEAAAAOAAQAAAABAAEAAAAPAAQAAAABAAEAAAAQAAQAAAABAAEAAAARAAQAAAABAAEAAAASAAQAAAABAAEAAAATAAQAAAAAAAMAAAAUAAQAAAABAAEAAAAVAAQAAAABAAEAAAAWAAQAAAABAAEAAAAXAAQAAAABAAEAAAAYAAQAAAABAAEAAAAZAAQAAAABAAEAAAAaAAQAAAABAAEAAAAbAAQAAAABAAEAAAAcAAQAAAABAAEAAAAdAAQAAAABAAEAAAAeAAQAAAABAAEAAAAfAAQAAAABAAEAAAAAAAUAAAABAAEAAAABAAUAAAAAAAMAAAACAAUAAAABAAEAAAADAAUAAAABAAEAAAAEAAUAAAABAAEAAAAFAAUAAAABAAEAAAAGAAUAAAABAAEAAAAHAAUAAAABAAEAAAAIAAUAAAABAAEAAAAJAAUAAAABAAEAAAAKAAUAAAABAAEAAAALAAUAAAABAAEAAAAMAAUAAAABAAEAAAANAAUAAAABAAEAAAAOAAUAAAAAAAMAAAAPAAUAAAABAAEAAAAQAAUAAAABAAEAAAARAAUAAAABAAEAAAASAAUAAAABAAEAAAATAAUAAAABAAEAAAAUAAUAAAABAAEAAAAVAAUAAAABAAEAAAAWAAUAAAABAAEAAAAXAAUAAAABAAEAAAAYAAUAAAABAAEAAAAZAAUAAAABAAEAAAAaAAUAAAABAAEAAAAbAAUAAAAAAAMAAAAcAAUAAAABAAEAAAAdAAUAAAABAAEAAAAeAAUAAAABAAEAAAAfAAUAAAABAAEAAAAAAAYAAAABAAEAAAABAAYAAAABAAEAAAACAAYAAAABAAEAAAADAAYAAAABAAEAAAAEAAYAAAABAAEAAAAFAAYAAAABAAEAAAAGAAYAAAABAAEAAAAHAAYAAAABAAEAAAAIAAYAAAABAAEAAAAJAAYAAAAAAAMAAAAKAAYAAAABAAEAAAALAAYAAAABAAEAAAAMAAYAAAABAAEAAAANAAYAAAABAAEAAAAOAAYAAAABAAIAAAAPAAYAAAABAAIAAAAQAAYAAAABAAIAAAARAAYAAAABAAIAAAASAAYAAAABAAEAAAATAAYAAAABAAEAAAAUAAYAAAABAAEAAAAVAAYAAAABAAEAAAAWAAYAAAAAAAMAAAAXAAYAAAABAAEAAAAYAAYAAAABAAEAAAAZAAYAAAABAAEAAAAaAAYAAAABAAEAAAAbAAYAAAABAAEAAAAcAAYAAAABAAEAAAAdAAYAAAABAAEAAAAeAAYAAAABAAEAAAAfAAYAAAABAAEAAAAAAAcAAAABAAEAAAABAAcAAAABAAEAAAACAAcAAAABAAEAAAADAAcAAAABAAEAAAAEAAcAAAAAAAMAAAAFAAcAAAABAAEAAAAGAAcAAAABAAEAAAAHAAcAAAABAAEAAAAIAAcAAAABAAEAAAAJAAcAAAABAAEAAAAKAAcAAAABAAEAAAALAAcAAAABAAEAAAAMAAcAAAABAAEAAAANAAcAAAACAAEAAAAOAAcAAAADAAAAAAAPAAcAAAABAAMAAAAQAAcAAAADAAAAAAARAAcAAAADAAAAAAASAAcAAAAAAAEAAAATAAcAAAABAAEAAAAUAAcAAAABAAEAAAAVAAcAAAABAAEAAAAWAAcAAAABAAEAAAAXAAcAAAABAAEAAAAYAAcAAAABAAEAAAAZAAcAAAABAAEAAAAaAAcAAAABAAEAAAAbAAcAAAABAAEAAAAcAAcAAAABAAEAAAAdAAcAAAABAAEAAAAeAAcAAAAAAAMAAAAfAAcAAAABAAEAAAAAAAgAAAABAAEAAAABAAgAAAABAAEAAAACAAgAAAABAAEAAAADAAgAAAABAAEAAAAEAAgAAAABAAEAAAAFAAgAAAABAAEAAAAGAAgAAAABAAEAAAAHAAgAAAABAAEAAAAIAAgAAAABAAEAAAAJAAgAAAABAAEAAAAKAAgAAAABAAEAAAALAAgAAAABAAEAAAAMAAgAAAAAAAMAAAANAAgAAAACAAEAAAAOAAgAAAADAAAAAAAPAAgAAAADAAAAAAAQAAgAAAADAAAAAAARAAgAAAADAAAAAAASAAgAAAAAAAEAAAATAAgAAAABAAEAAAAUAAgAAAABAAEAAAAVAAgAAAABAAEAAAAWAAgAAAABAAEAAAAXAAgAAAABAAEAAAAYAAgAAAABAAEAAAAZAAgAAAAAAAMAAAAaAAgAAAABAAEAAAAbAAgAAAABAAEAAAAcAAgAAAABAAEAAAAdAAgAAAABAAEAAAAeAAgAAAABAAEAAAAfAAgAAAABAAEAAAAAAAkAAAABAAEAAAABAAkAAAABAAEAAAACAAkAAAABAAEAAAADAAkAAAABAAEAAAAEAAkAAAABAAEAAAAFAAkAAAABAAEAAAAGAAkAAAABAAEAAAAHAAkAAAAAAAMAAAAIAAkAAAABAAEAAAAJAAkAAAABAAEAAAAKAAkAAAABAAEAAAALAAkAAAABAAEAAAAMAAkAAAABAAEAAAANAAkAAAACAAEAAAAOAAkAAAADAAAAAAAPAAkAAAADAAAAAAAQAAkAAAADAAAAAAARAAkAAAADAAAAAAASAAkAAAAAAAEAAAATAAkAAAABAAEAAAAUAAkAAAAAAAMAAAAVAAkAAAABAAEAAAAWAAkAAAABAAEAAAAXAAkAAAABAAEAAAAYAAkAAAABAAEAAAAZAAkAAAABAAEAAAAaAAkAAAABAAEAAAAbAAkAAAABAAEAAAAcAAkAAAABAAEAAAAdAAkAAAABAAEAAAAeAAkAAAABAAEAAAAfAAkAAAABAAEAAAAAAAoAAAABAAEAAAABAAoAAAABAAEAAAACAAoAAAAAAAMAAAADAAoAAAABAAEAAAAEAAoAAAABAAIAAAAFAAoAAAABAAIAAAAGAAoAAAABAAIAAAAHAAoAAAABAAIAAAAIAAoAAAABAAIAAAAJAAoAAAABAAIAAAAKAAoAAAABAAIAAAALAAoAAAABAAIAAAAMAAoAAAABAAIAAAANAAoAAAACAAEAAAAOAAoAAAADAAAAAAAPAAoAAAADAAAAAAAQAAoAAAADAAAAAAARAAoAAAADAAAAAAASAAoAAAAAAAEAAAATAAoAAAABAAIAAAAUAAoAAAABAAIAAAAVAAoAAAABAAIAAAAWAAoAAAABAAIAAAAXAAoAAAABAAIAAAAYAAoAAAABAAIAAAAZAAoAAAABAAIAAAAaAAoAAAABAAIAAAAbAAoAAAABAAIAAAAcAAoAAAAAAAMAAAAdAAoAAAABAAEAAAAeAAoAAAABAAEAAAAfAAoAAAABAAEAAAAAAAsAAAABAAEAAAABAAsAAAABAAEAAAACAAsAAAABAAEAAAADAAsAAAACAAEAAAAEAAsAAAADAAAAAAAFAAsAAAADAAAAAAAGAAsAAAADAAAAAAAHAAsAAAABAAMAAAAIAAsAAAADAAAAAAAJAAsAAAADAAAAAAAKAAsAAAADAAAAAAALAAsAAAADAAAAAAAMAAsAAAADAAAAAAANAAsAAAAAAAIAAAAOAAsAAAADAAAAAAAPAAsAAAADAAAAAAAQAAsAAAADAAAAAAARAAsAAAADAAAAAAASAAsAAAAAAAIAAAATAAsAAAADAAAAAAAUAAsAAAADAAAAAAAVAAsAAAADAAAAAAAWAAsAAAADAAAAAAAXAAsAAAADAAAAAAAYAAsAAAADAAAAAAAZAAsAAAADAAAAAAAaAAsAAAADAAAAAAAbAAsAAAADAAAAAAAcAAsAAAAAAAEAAAAdAAsAAAABAAEAAAAeAAsAAAABAAEAAAAfAAsAAAABAAEAAAAAAAwAAAABAAEAAAABAAwAAAABAAEAAAACAAwAAAABAAEAAAADAAwAAAACAAEAAAAEAAwAAAADAAAAAAAFAAwAAAABAAMAAAAGAAwAAAADAAAAAAAHAAwAAAADAAAAAAAIAAwAAAADAAAAAAAJAAwAAAADAAAAAAAKAAwAAAADAAAAAAALAAwAAAADAAAAAAAMAAwAAAADAAAAAAANAAwAAAADAAAAAAAOAAwAAAADAAAAAAAPAAwAAAADAAAAAAAQAAwAAAADAAAAAAARAAwAAAADAAAAAAASAAwAAAADAAAAAAATAAwAAAADAAAAAAAUAAwAAAADAAAAAAAVAAwAAAADAAAAAAAWAAwAAAADAAAAAAAXAAwAAAADAAAAAAAYAAwAAAADAAAAAAAZAAwAAAADAAAAAAAaAAwAAAADAAAAAAAbAAwAAAADAAAAAAAcAAwAAAAAAAEAAAAdAAwAAAABAAEAAAAeAAwAAAABAAEAAAAfAAwAAAAAAAMAAAAAAA0AAAAAAAMAAAABAA0AAAABAAEAAAACAA0AAAABAAEAAAADAA0AAAACAAEAAAAEAA0AAAADAAAAAAAFAA0AAAADAAAAAAAGAA0AAAADAAAAAAAHAA0AAAADAAAAAAAIAA0AAAADAAAAAAAJAA0AAAADAAAAAAAKAA0AAAADAAAAAAALAA0AAAADAAAAAAAMAA0AAAADAAAAAAANAA0AAAADAAAAAAAOAA0AAAADAAAAAAAPAA0AAAADAAAAAAAQAA0AAAADAAAAAAARAA0AAAADAAAAAAASAA0AAAADAAAAAAATAA0AAAADAAAAAAAUAA0AAAADAAAAAAAVAA0AAAADAAAAAAAWAA0AAAADAAAAAAAXAA0AAAADAAAAAAAYAA0AAAADAAAAAAAZAA0AAAADAAAAAAAaAA0AAAADAAAAAAAbAA0AAAADAAAAAAAcAA0AAAAAAAEAAAAdAA0AAAABAAEAAAAeAA0AAAABAAEAAAAfAA0AAAABAAEAAAAAAA4AAAABAAEAAAABAA4AAAABAAEAAAACAA4AAAABAAEAAAADAA4AAAACAAEAAAAEAA4AAAADAAAAAAAFAA4AAAADAAAAAAAGAA4AAAADAAAAAAAHAA4AAAADAAAAAAAIAA4AAAADAAAAAAAJAA4AAAADAAAAAAAKAA4AAAADAAAAAAALAA4AAAADAAAAAAAMAA4AAAADAAAAAAANAA4AAAADAAAAAAAOAA4AAAADAAAAAAAPAA4AAAADAAAAAAAQAA4AAAADAAAAAAARAA4AAAADAAAAAAASAA4AAAADAAAAAAATAA4AAAADAAAAAAAUAA4AAAADAAAAAAAVAA4AAAADAAAAAAAWAA4AAAADAAAAAAAXAA4AAAADAAAAAAAYAA4AAAADAAAAAAAZAA4AAAADAAAAAAAaAA4AAAADAAAAAAAbAA4AAAADAAAAAAAcAA4AAAAAAAEAAAAdAA4AAAABAAEAAAAeAA4AAAABAAEAAAAfAA4AAAABAAEAAAAAAA8AAAABAAEAAAABAA8AAAABAAEAAAACAA8AAAABAAEAAAADAA8AAAAAAAMAAAAEAA8AAAABAAAAAAAFAA8AAAABAAAAAAAGAA8AAAABAAAAAAAHAA8AAAABAAAAAAAIAA8AAAABAAAAAAAJAA8AAAABAAAAAAAKAA8AAAABAAAAAAALAA8AAAABAAAAAAAMAA8AAAABAAAAAAANAA8AAAACAAAAAAAOAA8AAAADAAAAAAAPAA8AAAADAAAAAAAQAA8AAAADAAAAAAARAA8AAAADAAAAAAASAA8AAAAAAAAAAAATAA8AAAABAAAAAAAUAA8AAAABAAAAAAAVAA8AAAABAAAAAAAWAA8AAAABAAAAAAAXAA8AAAABAAAAAAAYAA8AAAABAAAAAAAZAA8AAAABAAAAAAAaAA8AAAABAAAAAAAbAA8AAAABAAAAAAAcAA8AAAABAAEAAAAdAA8AAAAAAAMAAAAeAA8AAAABAAEAAAAfAA8AAAABAAEAAAAAABAAAAABAAEAAAABABAAAAABAAEAAAACABAAAAABAAEAAAADABAAAAABAAEAAAAEABAAAAABAAEAAAAFABAAAAABAAEAAAAGABAAAAABAAEAAAAHABAAAAABAAEAAAAIABAAAAABAAEAAAAJABAAAAABAAEAAAAKABAAAAABAAEAAAALABAAAAAAAAMAAAAMABAAAAABAAEAAAANABAAAAACAAEAAAAOABAAAAADAAAAAAAPABAAAAADAAAAAAAQABAAAAADAAAAAAARABAAAAADAAAAAAASABAAAAAAAAEAAAATABAAAAABAAEAAAAUABAAAAABAAEAAAAVABAAAAABAAEAAAAWABAAAAABAAEAAAAXABAAAAABAAEAAAAYABAAAAAAAAMAAAAZABAAAAABAAEAAAAaABAAAAABAAEAAAAbABAAAAABAAEAAAAcABAAAAABAAEAAAAdABAAAAABAAEAAAAeABAAAAABAAEAAAAfABAAAAABAAEAAAAAABEAAAABAAEAAAABABEAAAABAAEAAAACABEAAAABAAEAAAADABEAAAABAAEAAAAEABEAAAABAAEAAAAFABEAAAABAAEAAAAGABEAAAAAAAMAAAAHABEAAAABAAEAAAAIABEAAAABAAEAAAAJABEAAAABAAEAAAAKABEAAAABAAEAAAALABEAAAABAAEAAAAMABEAAAABAAEAAAANABEAAAACAAEAAAAOABEAAAADAAAAAAAPABEAAAADAAAAAAAQABEAAAADAAAAAAARABEAAAADAAAAAAASABEAAAAAAAEAAAATABEAAAAAAAMAAAAUABEAAAABAAEAAAAVABEAAAABAAEAAAAWABEAAAABAAEAAAAXABEAAAABAAEAAAAYABEAAAABAAEAAAAZABEAAAABAAEAAAAaABEAAAABAAEAAAAbABEAAAABAAEAAAAcABEAAAABAAEAAAAdABEAAAABAAEAAAAeABEAAAABAAEAAAAfABEAAAABAAEAAAAAABIAAAABAAEAAAABABIAAAAAAAMAAAACABIAAAABAAEAAAADABIAAAABAAEAAAAEABIAAAABAAEAAAAFABIAAAABAAEAAAAGABIAAAABAAEAAAAHABIAAAABAAEAAAAIABIAAAABAAEAAAAJABIAAAABAAEAAAAKABIAAAABAAEAAAALABIAAAABAAEAAAAMABIAAAABAAEAAAANABIAAAACAAEAAAAOABIAAAADAAAAAAAPABIAAAADAAAAAAAQABIAAAADAAAAAAARABIAAAADAAAAAAASABIAAAAAAAEAAAATABIAAAABAAEAAAAUABIAAAABAAEAAAAVABIAAAABAAEAAAAWABIAAAABAAEAAAAXABIAAAABAAEAAAAYABIAAAABAAEAAAAZABIAAAABAAEAAAAaABIAAAABAAEAAAAbABIAAAAAAAMAAAAcABIAAAABAAEAAAAdABIAAAABAAEAAAAeABIAAAABAAEAAAAfABIAAAABAAEAAAAAABMAAAABAAEAAAABABMAAAABAAEAAAACABMAAAABAAEAAAADABMAAAABAAEAAAAEABMAAAABAAEAAAAFABMAAAABAAEAAAAGABMAAAABAAEAAAAHABMAAAABAAEAAAAIABMAAAABAAEAAAAJABMAAAAAAAMAAAAKABMAAAABAAEAAAALABMAAAABAAEAAAAMABMAAAABAAEAAAANABMAAAACAAEAAAAOABMAAAADAAAAAAAPABMAAAADAAAAAAAQABMAAAADAAAAAAARABMAAAADAAAAAAASABMAAAAAAAEAAAATABMAAAABAAEAAAAUABMAAAABAAEAAAAVABMAAAABAAEAAAAWABMAAAAAAAMAAAAXABMAAAABAAEAAAAYABMAAAABAAEAAAAZABMAAAABAAEAAAAaABMAAAABAAEAAAAbABMAAAABAAEAAAAcABMAAAABAAEAAAAdABMAAAABAAEAAAAeABMAAAABAAEAAAAfABMAAAABAAEAAAAAABQAAAABAAEAAAABABQAAAABAAEAAAACABQAAAABAAEAAAADABQAAAABAAEAAAAEABQAAAAAAAMAAAAFABQAAAABAAEAAAAGABQAAAABAAEAAAAHABQAAAABAAEAAAAIABQAAAABAAEAAAAJABQAAAABAAEAAAAKABQAAAABAAEAAAALABQAAAABAAEAAAAMABQAAAABAAEAAAANABQAAAACAAEAAAAOABQAAAADAAAAAAAPABQAAAADAAAAAAAQABQAAAADAAAAAAARABQAAAADAAAAAAASABQAAAAAAAEAAAATABQAAAABAAEAAAAUABQAAAABAAEAAAAVABQAAAABAAEAAAAWABQAAAABAAEAAAAXABQAAAABAAEAAAAYABQAAAABAAEAAAAZABQAAAABAAEAAAAaABQAAAABAAEAAAAbABQAAAABAAEAAAAcABQAAAABAAEAAAAdABQAAAABAAEAAAAeABQAAAAAAAMAAAAfABQAAAABAAEAAAAAABUAAAABAAEAAAABABUAAAABAAEAAAACABUAAAABAAEAAAADABUAAAABAAEAAAAEABUAAAABAAEAAAAFABUAAAABAAEAAAAGABUAAAABAAEAAAAHABUAAAABAAEAAAAIABUAAAABAAEAAAAJABUAAAABAAEAAAAKABUAAAABAAEAAAALABUAAAABAAEAAAAMABUAAAAAAAMAAAANABUAAAACAAEAAAAOABUAAAADAAAAAAAPABUAAAADAAAAAAAQABUAAAABAAMAAAARABUAAAADAAAAAAASABUAAAAAAAEAAAATABUAAAABAAEAAAAUABUAAAABAAEAAAAVABUAAAABAAEAAAAWABUAAAABAAEAAAAXABUAAAABAAEAAAAYABUAAAABAAEAAAAZABUAAAAAAAMAAAAaABUAAAABAAEAAAAbABUAAAABAAEAAAAcABUAAAABAAEAAAAdABUAAAABAAEAAAAeABUAAAABAAEAAAAfABUAAAABAAEAAAAAABYAAAABAAEAAAABABYAAAABAAEAAAACABYAAAABAAEAAAADABYAAAABAAEAAAAEABYAAAABAAEAAAAFABYAAAABAAEAAAAGABYAAAABAAEAAAAHABYAAAAAAAMAAAAIABYAAAABAAEAAAAJABYAAAABAAEAAAAKABYAAAABAAEAAAALABYAAAABAAEAAAAMABYAAAABAAEAAAANABYAAAACAAEAAAAOABYAAAABAAMAAAAPABYAAAADAAAAAAAQABYAAAADAAAAAAARABYAAAADAAAAAAASABYAAAAAAAEAAAATABYAAAABAAEAAAAUABYAAAAAAAMAAAAVABYAAAABAAEAAAAWABYAAAABAAEAAAAXABYAAAABAAEAAAAYABYAAAABAAEAAAAZABYAAAABAAEAAAAaABYAAAABAAEAAAAbABYAAAABAAEAAAAcABYAAAABAAEAAAAdABYAAAABAAEAAAAeABYAAAABAAEAAAAfABYAAAABAAEAAAAAABcAAAABAAEAAAABABcAAAABAAEAAAACABcAAAAAAAMAAAADABcAAAABAAEAAAAEABcAAAABAAEAAAAFABcAAAABAAEAAAAGABcAAAABAAEAAAAHABcAAAABAAEAAAAIABcAAAABAAEAAAAJABcAAAABAAEAAAAKABcAAAABAAEAAAALABcAAAABAAEAAAAMABcAAAABAAEAAAANABcAAAACAAEAAAAOABcAAAADAAAAAAAPABcAAAADAAAAAAAQABcAAAADAAAAAAARABcAAAADAAAAAAASABcAAAAAAAEAAAATABcAAAABAAEAAAAUABcAAAABAAEAAAAVABcAAAABAAEAAAAWABcAAAABAAEAAAAXABcAAAABAAEAAAAYABcAAAABAAEAAAAZABcAAAABAAEAAAAaABcAAAABAAEAAAAbABcAAAABAAEAAAAcABcAAAAAAAMAAAAdABcAAAABAAEAAAAeABcAAAABAAEAAAAfABcAAAABAAEAAAA=")
+tile_set = ExtResource("2_joujw")
+collision_enabled = false
+
+[node name="DepthSort" type="Node2D" parent="." unique_id=2026512202]
+y_sort_enabled = true
+
+[node name="Caidat" type="StaticBody2D" parent="DepthSort" unique_id=558310209 groups=["square_obstacles"]]
+position = Vector2(272, 382)
+collision_mask = 2
+metadata/pattern = "caidat"
+metadata/footprint_local = Rect2(-140, -152, 280, 140)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Caidat" unique_id=1326648313]
+position = Vector2(-144, -270)
+scale = Vector2(0.26865673, 0.2635659)
+texture = ExtResource("3_wsa6m")
+centered = false
+
+[node name="@CollisionShape2D@2" type="CollisionShape2D" parent="DepthSort/Caidat" unique_id=646522347]
+position = Vector2(0, -82)
+shape = SubResource("RectangleShape2D_58nj0")
+
+[node name="@CollisionShape2D@3" type="CollisionShape2D" parent="DepthSort/Caidat" unique_id=484526706]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_on06k")
+
+[node name="Name" type="Label" parent="DepthSort/Caidat" unique_id=1713455852]
+offset_left = -45.0
+offset_top = -172.0
+offset_right = 45.0
+offset_bottom = -144.0
+layout_direction = 2
+theme_override_colors/font_color = Color(0.35686275, 0.16862746, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("4_ipf68")
+theme_override_font_sizes/font_size = 15
+text = "Caidat"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_direction = 2
+language = "ar_MA"
+
+[node name="Hospital" type="StaticBody2D" parent="DepthSort" unique_id=1565398451 groups=["square_obstacles"]]
+position = Vector2(752, 382)
+collision_mask = 2
+metadata/pattern = "hospital"
+metadata/footprint_local = Rect2(-140, -150, 280, 132)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Hospital" unique_id=1601599033]
+position = Vector2(-144, -238)
+scale = Vector2(0.2589928, 0.2542373)
+texture = ExtResource("5_g1jj0")
+centered = false
+
+[node name="@CollisionShape2D@4" type="CollisionShape2D" parent="DepthSort/Hospital" unique_id=1164173487]
+position = Vector2(0, -84)
+shape = SubResource("RectangleShape2D_lp78c")
+
+[node name="@CollisionShape2D@5" type="CollisionShape2D" parent="DepthSort/Hospital" unique_id=880206220]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_81e76")
+
+[node name="Name" type="Label" parent="DepthSort/Hospital" unique_id=517748252]
+offset_left = -50.0
+offset_top = -176.0
+offset_right = 50.0
+offset_bottom = -148.0
+layout_direction = 2
+theme_override_colors/font_color = Color(0.35686275, 0.16862746, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("4_ipf68")
+theme_override_font_sizes/font_size = 15
+text = "Hospital"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_direction = 2
+language = "ar_MA"
+
+[node name="Tree0" type="StaticBody2D" parent="DepthSort" unique_id=1521051075 groups=["square_obstacles"]]
+position = Vector2(31, 126)
+collision_mask = 2
+metadata/pattern = "olive_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree0" unique_id=387877068]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_t0m8q")
+centered = false
+
+[node name="@CollisionShape2D@6" type="CollisionShape2D" parent="DepthSort/Tree0" unique_id=1197354518]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_oq8da")
+
+[node name="Tree1" type="StaticBody2D" parent="DepthSort" unique_id=869218920 groups=["square_obstacles"]]
+position = Vector2(255, 94)
+collision_mask = 2
+metadata/pattern = "fig_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree1" unique_id=1972028957]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_ybunj")
+centered = false
+
+[node name="@CollisionShape2D@7" type="CollisionShape2D" parent="DepthSort/Tree1" unique_id=1795534595]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_0yh1l")
+
+[node name="Tree2" type="StaticBody2D" parent="DepthSort" unique_id=1412179618 groups=["square_obstacles"]]
+position = Vector2(511, 94)
+collision_mask = 2
+metadata/pattern = "olive_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree2" unique_id=1367412102]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_wpl1a")
+centered = false
+
+[node name="@CollisionShape2D@8" type="CollisionShape2D" parent="DepthSort/Tree2" unique_id=1412831885]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_amu1o")
+
+[node name="Tree3" type="StaticBody2D" parent="DepthSort" unique_id=1503343224 groups=["square_obstacles"]]
+position = Vector2(767, 94)
+collision_mask = 2
+metadata/pattern = "fig_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree3" unique_id=608169095]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_v1t8s")
+centered = false
+
+[node name="@CollisionShape2D@9" type="CollisionShape2D" parent="DepthSort/Tree3" unique_id=272895924]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_7asc8")
+
+[node name="Tree4" type="StaticBody2D" parent="DepthSort" unique_id=471726107 groups=["square_obstacles"]]
+position = Vector2(991, 126)
+collision_mask = 2
+metadata/pattern = "olive_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree4" unique_id=67399829]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_p1u5h")
+centered = false
+
+[node name="@CollisionShape2D@10" type="CollisionShape2D" parent="DepthSort/Tree4" unique_id=237487467]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_byynb")
+
+[node name="Tree5" type="StaticBody2D" parent="DepthSort" unique_id=1157250833 groups=["square_obstacles"]]
+position = Vector2(-1, 414)
+collision_mask = 2
+metadata/pattern = "fig_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree5" unique_id=1092600710]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_t3x6w")
+centered = false
+
+[node name="@CollisionShape2D@11" type="CollisionShape2D" parent="DepthSort/Tree5" unique_id=1897291642]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_5a8s8")
+
+[node name="Tree6" type="StaticBody2D" parent="DepthSort" unique_id=1164915466 groups=["square_obstacles"]]
+position = Vector2(991, 446)
+collision_mask = 2
+metadata/pattern = "olive_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree6" unique_id=1012644915]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_rc6lb")
+centered = false
+
+[node name="@CollisionShape2D@12" type="CollisionShape2D" parent="DepthSort/Tree6" unique_id=2093621687]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_1jae2")
+
+[node name="Tree7" type="StaticBody2D" parent="DepthSort" unique_id=1451996711 groups=["square_obstacles"]]
+position = Vector2(159, 702)
+collision_mask = 2
+metadata/pattern = "fig_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree7" unique_id=1765789469]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_2wcil")
+centered = false
+
+[node name="@CollisionShape2D@13" type="CollisionShape2D" parent="DepthSort/Tree7" unique_id=1845835445]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_hiu2a")
+
+[node name="Tree8" type="StaticBody2D" parent="DepthSort" unique_id=1828219600 groups=["square_obstacles"]]
+position = Vector2(831, 702)
+collision_mask = 2
+metadata/pattern = "olive_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree8" unique_id=231996470]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_xhxch")
+centered = false
+
+[node name="@CollisionShape2D@14" type="CollisionShape2D" parent="DepthSort/Tree8" unique_id=1203057061]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_o0kva")
+
+[node name="Tree9" type="StaticBody2D" parent="DepthSort" unique_id=1539894912 groups=["square_obstacles"]]
+position = Vector2(31, 862)
+collision_mask = 2
+metadata/pattern = "fig_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree9" unique_id=225419465]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_morw1")
+centered = false
+
+[node name="@CollisionShape2D@15" type="CollisionShape2D" parent="DepthSort/Tree9" unique_id=265529543]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_gb18k")
+
+[node name="Tree10" type="StaticBody2D" parent="DepthSort" unique_id=2097903954 groups=["square_obstacles"]]
+position = Vector2(991, 862)
+collision_mask = 2
+metadata/pattern = "olive_tree"
+metadata/footprint_local = Rect2(-13, -18, 26, 18)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Tree10" unique_id=1211705780]
+position = Vector2(-63, -190)
+texture = SubResource("AtlasTexture_laid8")
+centered = false
+
+[node name="@CollisionShape2D@16" type="CollisionShape2D" parent="DepthSort/Tree10" unique_id=1181402018]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_ocnnw")
+
+[node name="Flowers2_13" type="StaticBody2D" parent="DepthSort" unique_id=2027937534]
+position = Vector2(79, 446)
+collision_mask = 2
+metadata/pattern = "wildflowers"
+metadata/footprint_local = Rect2(-13, -13.4, 26, 14.4)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Flowers2_13" unique_id=1473969023]
+position = Vector2(-15, -30)
+texture = SubResource("AtlasTexture_8mdo2")
+centered = false
+
+[node name="Flowers12_15" type="StaticBody2D" parent="DepthSort" unique_id=572599764]
+position = Vector2(399, 510)
+collision_mask = 2
+metadata/pattern = "wildflowers"
+metadata/footprint_local = Rect2(-13, -13.4, 26, 14.4)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Flowers12_15" unique_id=685412805]
+position = Vector2(-15, -30)
+texture = SubResource("AtlasTexture_y8ctc")
+centered = false
+
+[node name="Flowers20_16" type="StaticBody2D" parent="DepthSort" unique_id=1435029075]
+position = Vector2(655, 542)
+collision_mask = 2
+metadata/pattern = "wildflowers"
+metadata/footprint_local = Rect2(-13, -13.4, 26, 14.4)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Flowers20_16" unique_id=895888234]
+position = Vector2(-15, -30)
+texture = SubResource("AtlasTexture_extun")
+centered = false
+
+[node name="Flowers28_14" type="StaticBody2D" parent="DepthSort" unique_id=149229479]
+position = Vector2(911, 478)
+collision_mask = 2
+metadata/pattern = "wildflowers"
+metadata/footprint_local = Rect2(-13, -13.4, 26, 14.4)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Flowers28_14" unique_id=716805459]
+position = Vector2(-15, -30)
+texture = SubResource("AtlasTexture_hjae6")
+centered = false
+
+[node name="Flowers9_22" type="StaticBody2D" parent="DepthSort" unique_id=1090562529]
+position = Vector2(303, 734)
+collision_mask = 2
+metadata/pattern = "wildflowers"
+metadata/footprint_local = Rect2(-13, -13.4, 26, 14.4)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Flowers9_22" unique_id=42450608]
+position = Vector2(-15, -30)
+texture = SubResource("AtlasTexture_gdtl0")
+centered = false
+
+[node name="Flowers21_22" type="StaticBody2D" parent="DepthSort" unique_id=1335004631]
+position = Vector2(687, 734)
+collision_mask = 2
+metadata/pattern = "wildflowers"
+metadata/footprint_local = Rect2(-13, -13.4, 26, 14.4)
+
+[node name="Artwork" type="Sprite2D" parent="DepthSort/Flowers21_22" unique_id=1590178424]
+position = Vector2(-15, -30)
+texture = SubResource("AtlasTexture_crrrv")
+centered = false
+
+[node name="ToDouar" type="StaticBody2D" parent="DepthSort" unique_id=813232696 instance=ExtResource("7_pkd45")]
+texture_filter = 1
+position = Vector2(672, 688)
+collision_mask = 2
+script = ExtResource("8_6b0oj")
+direction = -2
+
+[node name="MapBoundary" type="StaticBody2D" parent="." unique_id=560637580]
+collision_mask = 2
+
+[node name="@CollisionShape2D@17" type="CollisionShape2D" parent="MapBoundary" unique_id=871648092]
+position = Vector2(-16, 384)
+shape = SubResource("RectangleShape2D_mryrc")
+
+[node name="@CollisionShape2D@18" type="CollisionShape2D" parent="MapBoundary" unique_id=653296523]
+position = Vector2(1040, 384)
+shape = SubResource("RectangleShape2D_5rxhj")
+
+[node name="@CollisionShape2D@19" type="CollisionShape2D" parent="MapBoundary" unique_id=2144106643]
+position = Vector2(512, -16)
+shape = SubResource("RectangleShape2D_ndn8n")
+
+[node name="@CollisionShape2D@20" type="CollisionShape2D" parent="MapBoundary" unique_id=921764764]
+position = Vector2(512, 784)
+shape = SubResource("RectangleShape2D_0lcyu")
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1276276331]
+position = Vector2(512, 656)

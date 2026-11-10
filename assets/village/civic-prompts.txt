@@ -1,0 +1,18 @@
+Generated with the built-in image_gen tool. Original PNG alpha is preserved; AtlasTextures select the sprite regions and Godot supplies Arabic lettering.
+
+CAIDAT
+Use case: precise-object-edit / background-extraction.
+Input image 1 is the approved AtlasPixels design reference. Extract/recreate ONLY the upper LEFT Moroccan CAIDAT administrative building as one isolated game sprite on genuine transparent alpha. Preserve its specific design: warm ochre plaster, flat terracotta red parapet roof with corner posts, short Moroccan red flag with green star on roof pole, symmetrical facade with two small blue-grilled windows, green central arched double door, broad three-step front stair. Match the original crisp coarse pixel-art top-down RPG three-quarter perspective, dark brown outlines and shading exactly. Full building and flag uncropped, no ground, no grass, no trees, no background, no surrounding shadows or glow, no other props.
+The small framed plaque centered above the door must be BLANK light tan, no writing: real Arabic lettering will be added by Godot. Keep its frame. No text elsewhere.
+Production proportions: building body about 288 pixels wide by 224 tall, plus modest flag height (total approximately 270 logical pixels tall); output can be enlarged. Small clean transparent margin all sides. Hard clean pixel edges. One sprite only.
+
+HOSPITAL
+Use case: precise-object-edit / background-extraction.
+Input image 1 is the approved AtlasPixels design reference. Extract/recreate ONLY the upper RIGHT village hospital as one isolated production game sprite on actual transparent alpha. Preserve its design: warm white limewashed walls, turquoise-blue flat parapet roof, central curved roof crest containing a small red crescent, central blue double door, two square windows, and a short wide front entrance stair. Match the reference's crisp coarse square pixels, dark brown outlines, orthographic top-down RPG three-quarter facade perspective. Keep facade symmetrical and modest village scale.
+The small framed name plaque immediately under the crescent and above the door must be completely BLANK cream-colored. No Arabic or Latin letters: Godot overlays the name later. Retain crescent emblem.
+Entire sprite uncropped. Width about 288 logical game pixels, height about 224 including crest and stairs; output can be enlarged. No ground, trees, shadows outside silhouette, glow, haze, vehicles, people, or any background. Small clean fully transparent margin all sides. One sprite only.
+
+NORTH/SOUTH SIGN
+Use case: precise-object-edit.
+Input image 1 is the style reference of the AtlasPixels wooden directional sign. Make a matching sign prop with one important change: replace the arrow-shaped plank with a simple WIDE RECTANGULAR wooden plank with squared corners, NO arrow-shaped ends. Keep a single central dark wooden post, warm tan board, dark brown outlines, small silver nail heads near the four corners. The board face must be entirely blank pale tan, with a large clear writing area, no text, no symbols or painted arrows (the game overlays them). Coarse crisp square-pixel RPG sprite, matching the reference.
+Logical dimensions: board 128 pixels wide and 48 high, post extending another 40 pixels below. Whole sign about 128x96 logical pixels. Post top protrudes only slightly above plank. Full prop centered and uncropped on TRUE transparent alpha. No grass, shadows, glow, haze, background, or other objects. Clean hard pixel edges, transparency outside the wooden silhouette must be completely clear. One sprite only.
