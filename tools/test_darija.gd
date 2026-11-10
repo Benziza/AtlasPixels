@@ -47,7 +47,7 @@ func test_catalog() -> void:
 	# Cover literal tr() calls as well as the dynamically translated crop names.
 	var calls := RegEx.new()
 	calls.compile('tr\\("((?:[^"\\\\]|\\\\.)*)"\\)')
-	for path in ["res://maps/farm_state.gd", "res://maps/farm_game.gd", "res://maps/farm_hud.gd", "res://maps/douar_square.gd"]:
+	for path in ["res://maps/farm_state.gd", "res://maps/farm_game.gd", "res://maps/farm_hud.gd", "res://maps/douar_square.gd", "res://maps/cafe_interior.gd"]:
 		for call in calls.search_all(FileAccess.get_file_as_string(path)):
 			var message: String = JSON.parse_string('"' + call.get_string(1) + '"')
 			expect(not catalog.get_message(message).is_empty(), "Untranslated runtime message: " + message)
@@ -117,6 +117,14 @@ func test_scene() -> void:
 	await settle()
 	check_controls(game.hud.screen)
 	game.menu_action("new_confirm")
+	await settle()
+	check_controls(game.hud.screen)
+	game.close_menu()
+	game.activate_area("cafe", Vector2(384, 236))
+	game.open_cafe_menu()
+	await settle()
+	check_controls(game.hud.screen)
+	game.menu_action("cafe_tea")
 	await settle()
 	check_controls(game.hud.screen)
 	game.queue_free()

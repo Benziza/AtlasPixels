@@ -5,6 +5,8 @@ const START_MINUTE := 6 * 60
 const END_MINUTE := 26 * 60
 const SECONDS_PER_TICK := 7.0
 const CAN_CAPACITY := 40
+const SAVE_VERSION := 3
+const CAFE_PRICES := {"tea": 5, "coffee": 8, "msemen": 6}
 const CROPS := {
 	"mint": {"name": "Mint", "days": 4, "stages": [0, 1, 2, 4], "regrow": 0, "seed_price": 5, "price": 15},
 	"tomato": {"name": "Tomato", "days": 11, "stages": [0, 3, 7, 11], "regrow": 4, "seed_price": 10, "price": 35}
@@ -106,6 +108,15 @@ func sell_harvest() -> int:
 	coins += total
 	return total
 
+func buy_refreshment(item: String) -> String:
+	if not CAFE_PRICES.has(item):
+		return tr("Choose something from the cafe menu.")
+	var price: int = CAFE_PRICES[item]
+	if coins < price:
+		return tr("Not enough coins. Sell some of your harvest.")
+	coins -= price
+	return ""
+
 func advance_time(seconds: float) -> bool:
 	tick_seconds += maxf(seconds, 0.0)
 	while tick_seconds >= SECONDS_PER_TICK and minute < END_MINUTE:
@@ -159,7 +170,7 @@ func to_data() -> Dictionary:
 		record["x"] = cell.x
 		record["y"] = cell.y
 		records.append(record)
-	return {"version": 2, "area": area, "day": day, "minute": minute, "tick_seconds": tick_seconds,
+	return {"version": SAVE_VERSION, "area": area, "day": day, "minute": minute, "tick_seconds": tick_seconds,
 		"water": water, "coins": coins, "inventory": inventory.duplicate(), "selected_tool": selected_tool,
 		"player": [player_position.x, player_position.y], "beds": records}
 
@@ -168,10 +179,12 @@ static func whole(value: Variant, low: int, high: int) -> bool:
 
 func restore(data: Variant) -> bool:
 	# Validate everything before mutating live state. A bad file cannot partially load.
-	if not data is Dictionary or not whole(data.get("version"), 1, 2):
+	if not data is Dictionary or not whole(data.get("version"), 1, SAVE_VERSION):
 		return false
 	var saved_area: Variant = "farm" if int(data.version) == 1 else data.get("area")
-	if not saved_area is String or saved_area not in ["farm", "douar"]:
+	if not saved_area is String or Layout.area_size(saved_area) == Vector2i.ZERO:
+		return false
+	if int(data.version) < 3 and saved_area == "cafe":
 		return false
 	for spec in [["day", 1, 1000000], ["minute", START_MINUTE, END_MINUTE], ["water", 0, CAN_CAPACITY], ["coins", 0, 100000000], ["selected_tool", 0, 3]]:
 		if not whole(data.get(spec[0]), spec[1], spec[2]):
@@ -195,7 +208,7 @@ func restore(data: Variant) -> bool:
 	for value: Variant in pos:
 		if not (value is float or value is int) or not is_finite(float(value)):
 			return false
-	var map_size: Vector2i = Layout.FARM_SIZE if saved_area == "farm" else Layout.SQUARE_SIZE
+	var map_size: Vector2i = Layout.area_size(saved_area)
 	if pos[0] < 8 or pos[0] > map_size.x - 8 or pos[1] < 16 or pos[1] > map_size.y:
 		return false
 	var records: Variant = data.get("beds")

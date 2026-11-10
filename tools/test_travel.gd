@@ -56,7 +56,7 @@ func run_tests() -> void:
 	game = make_game()
 	await settle()
 	expect(not game.save_blocked and game.current_area == "farm" and game.state.day == 3, "Legacy farm save did not load")
-	expect(game.state.inventory.mint_seed == 14 and game.state.to_data().version == 2, "Legacy inventory was lost during migration")
+	expect(game.state.inventory.mint_seed == 14 and game.state.to_data().version == FarmState.SAVE_VERSION, "Legacy inventory was lost during migration")
 	game.player.position = Vector2(528, 344)
 	game.player.facing = &"up"
 	await settle()

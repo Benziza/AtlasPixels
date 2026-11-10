@@ -4,6 +4,7 @@ const FarmState = preload("res://maps/farm_state.gd")
 const FarmHUD = preload("res://maps/farm_hud.gd")
 const Layout = preload("res://maps/world_layout.gd")
 const Square = preload("res://maps/douar_square.tscn")
+const Cafe = preload("res://maps/cafe_interior.tscn")
 const TILE := 32
 const REACH := 58.0
 const SAVE_PATH := "user://farm-save.json"
@@ -19,6 +20,7 @@ var feedback: Node2D
 var player: CharacterBody2D
 var camera: Camera2D
 var square: Node2D
+var cafe: Node2D
 var current_area := "farm"
 var square_markers: Dictionary = {}
 var bed_edges: Dictionary = {}
@@ -53,6 +55,10 @@ func _ready() -> void:
 	square.visible = false
 	square.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(square)
+	cafe = Cafe.instantiate()
+	cafe.visible = false
+	cafe.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(cafe)
 	for cell in soil.get_used_cells():
 		var uv := soil.get_cell_atlas_coords(cell)
 		bed_edges[cell] = Vector2i(uv.x % 3, uv.y)
@@ -75,6 +81,7 @@ func _ready() -> void:
 		call_deferred("validate_spawn")
 	markers = collect_markers($DepthSort, ["farmhouse", "hanout", "well"])
 	square_markers = collect_markers(square.get_node("DepthSort"), ["hanout", "well"])
+	square_markers["cafe"] = Layout.CAFE_DOOR
 	daylight = CanvasModulate.new()
 	daylight.name = "Daylight"
 	add_child(daylight)
@@ -125,45 +132,76 @@ func add_route_sign(parent: Node2D, point: Vector2, text: String, direction: int
 		parent.move_child(sign, parent.get_node("DepthSort").get_index())
 
 func activate_area(area: String, point: Vector2) -> void:
+	assert(Layout.area_size(area) != Vector2i.ZERO, "Unknown area")
 	var on_farm := area == "farm"
-	var parent: Node2D = $DepthSort if on_farm else square.get_node("DepthSort")
+	var parent: Node2D = $DepthSort
+	if area == "douar":
+		parent = square.get_node("DepthSort")
+	elif area == "cafe":
+		parent = cafe.get_node("DepthSort")
 	if player.get_parent() != parent:
 		player.reparent(parent, false)
 	for node in [$Terrain, $DepthSort, $MapBoundary, $SaqyaBanks, $FarmExtension]:
 		node.visible = on_farm
 		node.process_mode = Node.PROCESS_MODE_INHERIT if on_farm else Node.PROCESS_MODE_DISABLED
-	square.visible = not on_farm
-	square.process_mode = Node.PROCESS_MODE_DISABLED if on_farm else Node.PROCESS_MODE_INHERIT
+	for entry: Array in [[square, "douar"], [cafe, "cafe"]]:
+		entry[0].visible = area == entry[1]
+		entry[0].process_mode = Node.PROCESS_MODE_INHERIT if area == entry[1] else Node.PROCESS_MODE_DISABLED
 	current_area = area
 	state.area = area
 	player.position = point
 	player.velocity = Vector2.ZERO
 	state.player_position = point
 	mouse_aim = false
-	var size_: Vector2i = Layout.FARM_SIZE if on_farm else Layout.SQUARE_SIZE
+	var size_: Vector2i = Layout.area_size(area)
 	camera.limit_right = size_.x
 	camera.limit_bottom = size_.y
 	camera.make_current()
 	camera.reset_smoothing()
 	camera.force_update_scroll()
+	if is_instance_valid(daylight):
+		update_daylight()
+
+func area_spawn() -> Vector2:
+	match current_area:
+		"cafe": return Layout.CAFE_SPAWN
+		"douar": return square.get_node("PlayerSpawn").position
+	return $PlayerSpawn.position
 
 func _physics_process(_delta: float) -> void:
 	if paused or inactive or transitioning:
 		return
-	var exit_: Rect2 = Layout.FARM_EXIT if current_area == "farm" else Layout.SQUARE_EXIT
-	if exit_.has_point(player.position):
-		transitioning = true
-		player.controls_enabled = false
-		player.velocity = Vector2.ZERO
-		call_deferred("travel_to", "douar" if current_area == "farm" else "farm")
+	if current_area == "farm" and Layout.FARM_EXIT.has_point(player.position):
+		begin_travel("douar")
+	elif current_area == "douar" and Layout.SQUARE_EXIT.has_point(player.position):
+		begin_travel("farm")
+	elif current_area == "cafe" and Layout.CAFE_EXIT.has_point(player.position):
+		begin_travel("douar")
+
+func begin_travel(area: String) -> void:
+	if transitioning or paused or inactive:
+		return
+	transitioning = true
+	player.controls_enabled = false
+	player.velocity = Vector2.ZERO
+	call_deferred("travel_to", area)
 
 func travel_to(area: String) -> void:
+	var previous_area := current_area
 	refresh_hud()
 	var fade := create_tween()
 	fade.tween_property(hud.day_fade, "color:a", 1.0, 0.15)
 	await fade.finished
-	activate_area(area, square.get_node("PlayerSpawn").position if area == "douar" else Layout.FARM_RETURN)
-	show_toast(tr("Welcome to the douar square.") if area == "douar" else tr("Back on your farm."), 5)
+	var destination := Layout.FARM_RETURN
+	var message := tr("Back on your farm.")
+	if area == "douar":
+		destination = Layout.CAFE_RETURN if previous_area == "cafe" else Layout.SQUARE_SPAWN
+		message = tr("Welcome to the douar square.")
+	elif area == "cafe":
+		destination = Layout.CAFE_SPAWN
+		message = tr("Welcome to the cafe. Order at the counter, or relax by the tables.")
+	activate_area(area, destination)
+	show_toast(message, 5)
 	var dawn := create_tween()
 	dawn.tween_property(hud.day_fade, "color:a", 0.0, 0.15)
 	await dawn.finished
@@ -202,7 +240,7 @@ func validate_spawn() -> void:
 	query.collision_mask = 1
 	query.exclude = [player.get_rid()]
 	if not get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty():
-		player.position = $PlayerSpawn.position if current_area == "farm" else square.get_node("PlayerSpawn").position
+		player.position = area_spawn()
 		camera.force_update_scroll()
 
 func _notification(what: int) -> void:
@@ -358,6 +396,8 @@ func use_tool(cell: Vector2i) -> bool:
 	return true
 
 func near_marker(name_: String, distance: float = 52.0) -> bool:
+	if current_area == "cafe":
+		return false
 	var active_markers: Dictionary = markers if current_area == "farm" else square_markers
 	return active_markers.has(name_) and player.position.distance_to(active_markers[name_]) <= distance
 
@@ -381,9 +421,18 @@ func water_nearby() -> bool:
 	return false
 
 func interact() -> void:
-	if paused or transitioning or cooldown > 0:
+	if paused or inactive or transitioning or cooldown > 0:
 		return
-	if near_marker("farmhouse", 64):
+	if current_area == "cafe":
+		if player.position.distance_to(cafe.COUNTER_SPOT) <= 58:
+			open_cafe_menu()
+		elif player.position.distance_to(cafe.CHECKERS_SPOT) <= 48:
+			show_toast(tr("A game of checkers, a glass of tea, and time to relax."), 5)
+		else:
+			show_toast(tr("Order at the counter. The exit is at the bottom of the room."), 5)
+	elif near_marker("cafe", 44):
+		begin_travel("cafe")
+	elif near_marker("farmhouse", 64):
 		open_sleep()
 	elif near_marker("hanout", 58):
 		open_shop()
@@ -410,6 +459,16 @@ func refill_can() -> void:
 	save_progress()
 
 func context_hint() -> String:
+	if current_area == "cafe":
+		if player.position.distance_to(cafe.COUNTER_SPOT) <= 58:
+			return tr("E  /  Tea, coffee and msemen")
+		if player.position.distance_to(cafe.CHECKERS_SPOT) <= 48:
+			return tr("E  /  The checkers table")
+		if player.position.y > 370:
+			return tr("Walk through the door to return to the douar.")
+		return ""
+	if near_marker("cafe", 44):
+		return tr("E  /  Enter the cafe")
 	if current_area == "farm" and Rect2(1408, 352, 80, 96).has_point(player.position):
 		return tr("Walk along the path to enter the douar.")
 	if current_area == "douar" and Rect2(Layout.SQUARE_EXIT.position + Vector2(48, 0), Vector2(96, Layout.SQUARE_EXIT.size.y)).has_point(player.position):
@@ -447,7 +506,7 @@ func refresh_hud() -> void:
 
 func update_daylight() -> void:
 	var dusk := clampf(float(state.minute - 17 * 60) / (4 * 60), 0, 1)
-	daylight.color = Color.WHITE.lerp(Color("7e88b0"), dusk)
+	daylight.color = Color.WHITE if current_area == "cafe" else Color.WHITE.lerp(Color("7e88b0"), dusk)
 
 func show_toast(message: String, duration: float = 3.0) -> void:
 	hud.toast_label.text = message
@@ -494,6 +553,10 @@ func open_shop() -> void:
 func shop_text() -> String:
 	return tr("Coins: %d\nBasket: %d mint / %d tomatoes\nSeeds: %d mint / %d tomato") % [state.coins, state.inventory.mint, state.inventory.tomato, state.inventory.mint_seed, state.inventory.tomato_seed]
 
+func open_cafe_menu() -> void:
+	set_paused(true)
+	hud.show_modal(tr("Village cafe"), tr("Welcome! Take a break.\nCoins: %d") % state.coins, [[tr("Mint tea  /  5 coins"), "cafe_tea"], [tr("Coffee  /  8 coins"), "cafe_coffee"], [tr("Msemen  /  6 coins"), "cafe_msemen"], [tr("Continue"), "close"]])
+
 func menu_action(action: String) -> void:
 	match action:
 		"pause":
@@ -525,6 +588,13 @@ func menu_action(action: String) -> void:
 		"sell":
 			var earned: int = state.sell_harvest()
 			hud.modal_detail.text = shop_text() + "\n" + (tr("Sold for %d coins.") % earned if earned > 0 else tr("Your basket is empty."))
+			refresh_hud()
+			save_progress()
+		"cafe_tea", "cafe_coffee", "cafe_msemen":
+			if current_area != "cafe" or not paused or not is_instance_valid(hud.modal):
+				return
+			var error: String = state.buy_refreshment(action.trim_prefix("cafe_"))
+			hud.modal_detail.text = (tr("Enjoy your break!\nCoins: %d") % state.coins) if error.is_empty() else error
 			refresh_hud()
 			save_progress()
 
