@@ -5,3 +5,9 @@ func _ready() -> void:
 	$DepthSort/Bakery/Name.text = tr("Bakery")
 	$DepthSort/Cafe/Artwork/Name.text = tr("Village cafe")
 	$DepthSort/Greengrocer/Artwork/Name.text = tr("Greengrocer")
+	var north_sign: StaticBody2D = preload("res://maps/route_sign.tscn").instantiate()
+	north_sign.name = "ToCivic"
+	north_sign.position = Vector2(784, 160)
+	north_sign.destination = "Caidat and hospital"
+	north_sign.direction = 2
+	$DepthSort.add_child(north_sign)

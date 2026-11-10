@@ -5,7 +5,7 @@ const START_MINUTE := 6 * 60
 const END_MINUTE := 26 * 60
 const SECONDS_PER_TICK := 7.0
 const CAN_CAPACITY := 40
-const SAVE_VERSION := 3
+const SAVE_VERSION := 4
 const CAFE_PRICES := {"tea": 5, "coffee": 8, "msemen": 6}
 const CROPS := {
 	"mint": {"name": "Mint", "days": 4, "stages": [0, 1, 2, 4], "regrow": 0, "seed_price": 5, "price": 15},
@@ -185,6 +185,8 @@ func restore(data: Variant) -> bool:
 	if not saved_area is String or Layout.area_size(saved_area) == Vector2i.ZERO:
 		return false
 	if int(data.version) < 3 and saved_area == "cafe":
+		return false
+	if int(data.version) < 4 and saved_area == "civic":
 		return false
 	for spec in [["day", 1, 1000000], ["minute", START_MINUTE, END_MINUTE], ["water", 0, CAN_CAPACITY], ["coins", 0, 100000000], ["selected_tool", 0, 3]]:
 		if not whole(data.get(spec[0]), spec[1], spec[2]):
