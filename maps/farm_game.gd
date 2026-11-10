@@ -6,6 +6,8 @@ const Layout = preload("res://maps/world_layout.gd")
 const Square = preload("res://maps/douar_square.tscn")
 const Cafe = preload("res://maps/cafe_interior.tscn")
 const Civic = preload("res://maps/civic_quarter.tscn")
+const CaidatInterior = preload("res://maps/caidat_interior.tscn")
+const HospitalInterior = preload("res://maps/hospital_interior.tscn")
 const RouteSign = preload("res://maps/route_sign.tscn")
 const TILE := 32
 const REACH := 58.0
@@ -24,6 +26,7 @@ var camera: Camera2D
 var square: Node2D
 var cafe: Node2D
 var civic: Node2D
+var civic_interiors: Dictionary = {}
 var current_area := "farm"
 var square_markers: Dictionary = {}
 var civic_markers: Dictionary = {}
@@ -67,6 +70,12 @@ func _ready() -> void:
 	civic.visible = false
 	civic.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(civic)
+	for entry: Array in [["caidat", CaidatInterior], ["hospital", HospitalInterior]]:
+		var interior: Node2D = entry[1].instantiate()
+		interior.visible = false
+		interior.process_mode = Node.PROCESS_MODE_DISABLED
+		civic_interiors[entry[0]] = interior
+		add_child(interior)
 	for cell in soil.get_used_cells():
 		var uv := soil.get_cell_atlas_coords(cell)
 		bed_edges[cell] = Vector2i(uv.x % 3, uv.y)
@@ -137,6 +146,8 @@ func activate_area(area: String, point: Vector2) -> void:
 		parent = cafe.get_node("DepthSort")
 	elif area == "civic":
 		parent = civic.get_node("DepthSort")
+	elif civic_interiors.has(area):
+		parent = civic_interiors[area].get_node("DepthSort")
 	if player.get_parent() != parent:
 		player.reparent(parent, false)
 	for node in [$Terrain, $DepthSort, $MapBoundary, $SaqyaBanks, $FarmExtension]:
@@ -145,6 +156,10 @@ func activate_area(area: String, point: Vector2) -> void:
 	for entry: Array in [[square, "douar"], [cafe, "cafe"], [civic, "civic"]]:
 		entry[0].visible = area == entry[1]
 		entry[0].process_mode = Node.PROCESS_MODE_INHERIT if area == entry[1] else Node.PROCESS_MODE_DISABLED
+	for name_: String in civic_interiors:
+		var interior: Node2D = civic_interiors[name_]
+		interior.visible = area == name_
+		interior.process_mode = Node.PROCESS_MODE_INHERIT if area == name_ else Node.PROCESS_MODE_DISABLED
 	current_area = area
 	state.area = area
 	player.position = point
@@ -164,6 +179,7 @@ func area_spawn() -> Vector2:
 	match current_area:
 		"cafe": return Layout.CAFE_SPAWN
 		"civic": return Layout.CIVIC_SPAWN
+		"caidat", "hospital": return Layout.CIVIC_INTERIOR_SPAWN
 		"douar": return square.get_node("PlayerSpawn").position
 	return $PlayerSpawn.position
 
@@ -180,6 +196,8 @@ func _physics_process(_delta: float) -> void:
 		begin_travel("douar")
 	elif current_area == "cafe" and Layout.CAFE_EXIT.has_point(player.position):
 		begin_travel("douar")
+	elif civic_interiors.has(current_area) and Layout.CIVIC_INTERIOR_EXIT.has_point(player.position):
+		begin_travel("civic")
 
 func begin_travel(area: String) -> void:
 	if transitioning or paused or inactive:
@@ -205,6 +223,16 @@ func travel_to(area: String) -> void:
 	elif area == "civic":
 		destination = Layout.CIVIC_SPAWN
 		message = tr("Welcome! The caidat is on the left and the hospital on the right.")
+		if previous_area == "caidat":
+			destination = Layout.CAIDAT_RETURN
+		elif previous_area == "hospital":
+			destination = Layout.HOSPITAL_RETURN
+	elif area == "caidat":
+		destination = Layout.CIVIC_INTERIOR_SPAWN
+		message = tr("Welcome to the caidat. Reception is on the left.")
+	elif area == "hospital":
+		destination = Layout.CIVIC_INTERIOR_SPAWN
+		message = tr("Welcome to the hospital. Reception is on the left.")
 	elif area == "cafe":
 		destination = Layout.CAFE_SPAWN
 		message = tr("Welcome to the cafe. Order at the counter, or relax by the tables.")
@@ -404,7 +432,7 @@ func use_tool(cell: Vector2i) -> bool:
 	return true
 
 func near_marker(name_: String, distance: float = 52.0) -> bool:
-	if current_area == "cafe":
+	if Layout.is_interior(current_area):
 		return false
 	var active_markers: Dictionary = markers if current_area == "farm" else square_markers
 	if current_area == "civic":
@@ -433,6 +461,10 @@ func water_nearby() -> bool:
 func interact() -> void:
 	if paused or inactive or transitioning or cooldown > 0:
 		return
+	if civic_interiors.has(current_area):
+		var spot: Dictionary = civic_interiors[current_area].near_interaction(player.position)
+		show_toast(spot.message if not spot.is_empty() else tr("The exit is at the bottom of the room."), 5)
+		return
 	if current_area == "cafe":
 		if player.position.distance_to(cafe.COUNTER_SPOT) <= 58:
 			open_cafe_menu()
@@ -449,9 +481,9 @@ func interact() -> void:
 	elif near_marker("bakery", 58):
 		show_toast(tr("Fresh khobz is baked here every morning."), 5)
 	elif near_marker("caidat", 58):
-		show_toast(tr("The local administration. Follow the southern path back to the douar."), 5)
+		begin_travel("caidat")
 	elif near_marker("hospital", 58):
-		show_toast(tr("The village hospital. Follow the southern path back to the douar."), 5)
+		begin_travel("hospital")
 	elif water_nearby():
 		refill_can()
 	elif current_area == "civic":
@@ -477,6 +509,11 @@ func refill_can() -> void:
 	save_progress()
 
 func context_hint() -> String:
+	if civic_interiors.has(current_area):
+		var spot: Dictionary = civic_interiors[current_area].near_interaction(player.position)
+		if not spot.is_empty():
+			return spot.hint
+		return tr("Walk through the door to return outside.") if player.position.y > 370 else ""
 	if current_area == "civic":
 		if near_marker("caidat", 58):
 			return tr("E  /  Caidat")
@@ -534,7 +571,7 @@ func refresh_hud() -> void:
 
 func update_daylight() -> void:
 	var dusk := clampf(float(state.minute - 17 * 60) / (4 * 60), 0, 1)
-	daylight.color = Color.WHITE if current_area == "cafe" else Color.WHITE.lerp(Color("7e88b0"), dusk)
+	daylight.color = Color.WHITE if Layout.is_interior(current_area) else Color.WHITE.lerp(Color("7e88b0"), dusk)
 
 func show_toast(message: String, duration: float = 3.0) -> void:
 	hud.toast_label.text = message

@@ -1,0 +1,9 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/interiors/civic/hospital-sheet.png" id="1"]
+
+[resource]
+resource_name = "wall-sink"
+atlas = ExtResource("1")
+region = Rect2(684, 469, 168, 198)
+filter_clip = true

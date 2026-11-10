@@ -115,7 +115,11 @@ func run_tests() -> void:
 		game.player.position = game.civic_markers[marker]
 		await settle()
 		game.interact()
-		expect(not game.paused and not game.hud.toast_label.text.is_empty(), "Civic building interaction failed: " + marker)
+		await settle(30)
+		expect(game.current_area == marker and not game.transitioning, "Civic doorway did not enter: " + marker)
+		game.player.position = Vector2(320, 424)
+		await settle(30)
+		expect(game.current_area == "civic" and not game.transitioning, "Interior exit did not return to civic map")
 	game.player.position = Vector2(512, 448)
 	game.state.selected_tool = 0
 	var seeds: int = game.state.inventory.mint_seed

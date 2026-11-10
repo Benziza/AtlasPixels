@@ -1,0 +1,14 @@
+Use case: stylized-concept
+Asset type: one production transparent sprite atlas for AtlasPixels Godot RPG.
+Input image 1 is the approved hospital room design. Image 2 is the existing cafe furniture atlas, the exact pixel art style reference.
+Create ONE sprite sheet 3 columns by 3 rows, nine isolated props centered within equal cells with wide transparent gutters. True transparent RGBA. No room or floor or walls. Same south-facing top-down 3/4 orthographic RPG perspective as references, crisp chunky pixels, dark outlines, warm cream and turquoise with muted gray metal.
+ROW 1 left: single hospital bed oriented north-south with head at top, white pillow/sheets, turquoise folded blanket over foot and gray metal headboard/footboard.
+ROW 1 middle: slim examination couch oriented north-south, cream cushion and teal pillow on gray legs.
+ROW 1 right: freestanding teal privacy curtain oriented north-south, almost side-on narrow profile, two metal posts with round bases.
+ROW 2 left: tall medicine cabinet with cream frame, glass upper doors showing small jars and boxes, teal lower cupboard doors.
+ROW 2 middle: small wall-mounted cream sink with gray faucet and exposed drainpipe.
+ROW 2 right: medical trolley with gray frame and wheels, folded cream towels on lower shelf and closed medical kit with red crescent on upper shelf.
+ROW 3 left: small wooden bedside cabinet with two drawers and a little covered jar on top.
+ROW 3 middle: closed cream medical case with handle and red crescent emblem.
+ROW 3 right: neat stack of folded cream towels.
+Match reference style, no characters, labels, letters, grid lines, watermark, backgrounds or overlapping objects. Every object complete, unclipped, isolated.
