@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "status": "integrated-in-cafe-scene",
+  "atlas": "res://assets/interiors/cafe/cafe-furniture-sheet.png",
+  "size": [
+    1254,
+    1254
+  ],
+  "preview": "res://docs/previews/cafe-interior.png",
+  "generation": "built-in image_gen",
+  "grid": [
+    4,
+    4
+  ],
+  "sprites": [
+    {
+      "id": "service-counter",
+      "name_fr": "Comptoir en bois et zellige",
+      "row": 0,
+      "column": 0,
+      "region": [
+        41,
+        109,
+        234,
+        195
+      ],
+      "resource": "res://assets/interiors/cafe/service-counter.tres"
+    },
+    {
+      "id": "tea-cabinet",
+      "name_fr": "Meuble à thé et vaisselle",
+      "row": 0,
+      "column": 1,
+      "region": [
+        345,
+        23,
+        250,
+        281
+      ],
+      "resource": "res://assets/interiors/cafe/tea-cabinet.tres"
+    },
+    {
+      "id": "espresso-machine",
+      "name_fr": "Machine à café sur meuble",
+      "row": 0,
+      "column": 2,
+      "region": [
+        677,
+        47,
+        215,
+        257
+      ],
+      "resource": "res://assets/interiors/cafe/espresso-machine.tres"
+    },
+    {
+      "id": "wall-lantern",
+      "name_fr": "Lanterne murale",
+      "row": 0,
+      "column": 3,
+      "region": [
+        1043,
+        55,
+        113,
+        234
+      ],
+      "resource": "res://assets/interiors/cafe/wall-lantern.tres"
+    },
+    {
+      "id": "tea-table",
+      "name_fr": "Table ronde à thé",
+      "row": 1,
+      "column": 0,
+      "region": [
+        56,
+        378,
+        202,
+        217
+      ],
+      "resource": "res://assets/interiors/cafe/tea-table.tres"
+    },
+    {
+      "id": "chair-north",
+      "name_fr": "Chaise orientée vers le nord",
+      "row": 1,
+      "column": 1,
+      "region": [
+        386,
+        387,
+        168,
+        213
+      ],
+      "resource": "res://assets/interiors/cafe/chair-north.tres"
+    },
+    {
+      "id": "chair-south",
+      "name_fr": "Chaise orientée vers le sud",
+      "row": 1,
+      "column": 2,
+      "region": [
+        707,
+        359,
+        153,
+        247
+      ],
+      "resource": "res://assets/interiors/cafe/chair-south.tres"
+    },
+    {
+      "id": "leather-pouf",
+      "name_fr": "Pouf en cuir",
+      "row": 1,
+      "column": 3,
+      "region": [
+        994,
+        378,
+        206,
+        218
+      ],
+      "resource": "res://assets/interiors/cafe/leather-pouf.tres"
+    },
+    {
+      "id": "banquette",
+      "name_fr": "Banquette et coussins",
+      "row": 2,
+      "column": 0,
+      "region": [
+        22,
+        680,
+        269,
+        222
+      ],
+      "resource": "res://assets/interiors/cafe/banquette.tres"
+    },
+    {
+      "id": "woven-rug",
+      "name_fr": "Tapis géométrique",
+      "row": 2,
+      "column": 1,
+      "region": [
+        338,
+        689,
+        265,
+        198
+      ],
+      "resource": "res://assets/interiors/cafe/woven-rug.tres"
+    },
+    {
+      "id": "checkers-table",
+      "name_fr": "Table de jeu de dames",
+      "row": 2,
+      "column": 2,
+      "region": [
+        689,
+        687,
+        189,
+        209
+      ],
+      "resource": "res://assets/interiors/cafe/checkers-table.tres"
+    },
+    {
+      "id": "tea-tray",
+      "name_fr": "Plateau de thé",
+      "row": 2,
+      "column": 3,
+      "region": [
+        965,
+        668,
+        258,
+        230
+      ],
+      "resource": "res://assets/interiors/cafe/tea-tray.tres"
+    },
+    {
+      "id": "bread-basket",
+      "name_fr": "Corbeille de pain et msemen",
+      "row": 3,
+      "column": 0,
+      "region": [
+        35,
+        1013,
+        244,
+        204
+      ],
+      "resource": "res://assets/interiors/cafe/bread-basket.tres"
+    },
+    {
+      "id": "mint-pot",
+      "name_fr": "Pot de menthe",
+      "row": 3,
+      "column": 1,
+      "region": [
+        373,
+        989,
+        196,
+        228
+      ],
+      "resource": "res://assets/interiors/cafe/mint-pot.tres"
+    },
+    {
+      "id": "arched-window",
+      "name_fr": "Fenêtre à volets turquoise",
+      "row": 3,
+      "column": 2,
+      "region": [
+        661,
+        981,
+        244,
+        238
+      ],
+      "resource": "res://assets/interiors/cafe/arched-window.tres"
+    },
+    {
+      "id": "wall-radio",
+      "name_fr": "Radio sur étagère",
+      "row": 3,
+      "column": 3,
+      "region": [
+        983,
+        1013,
+        227,
+        179
+      ],
+      "resource": "res://assets/interiors/cafe/wall-radio.tres"
+    }
+  ]
+}

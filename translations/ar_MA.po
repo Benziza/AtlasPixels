@@ -277,6 +277,45 @@ msgstr "القهوة"
 msgid "Greengrocer"
 msgstr "مول الخضرة"
 
+msgid "Welcome to the cafe. Order at the counter, or relax by the tables."
+msgstr "مرحبا بيك فالقهوة. طلب من الكونطوار ولا جلس ترتاح."
+
+msgid "A game of checkers, a glass of tea, and time to relax."
+msgstr "ضامة وكاس أتاي ووقت للراحة."
+
+msgid "Order at the counter. The exit is at the bottom of the room."
+msgstr "طلب من الكونطوار. الخروج من الباب اللي لتحت."
+
+msgid "E  /  Tea, coffee and msemen"
+msgstr "E  /  أتاي وقهوة ومسمن"
+
+msgid "E  /  The checkers table"
+msgstr "E  /  طبلة الضامة"
+
+msgid "Walk through the door to return to the douar."
+msgstr "دوز من الباب باش ترجع للدوار."
+
+msgid "E  /  Enter the cafe"
+msgstr "E  /  دخل للقهوة"
+
+msgid "Welcome! Take a break.\nCoins: %d"
+msgstr "مرحبا! جلس ترتاح.\nالفلوس: %d"
+
+msgid "Mint tea  /  5 coins"
+msgstr "أتاي بالنعناع  /  5 دالفلوس"
+
+msgid "Coffee  /  8 coins"
+msgstr "قهوة  /  8 دالفلوس"
+
+msgid "Msemen  /  6 coins"
+msgstr "مسمن  /  6 دالفلوس"
+
+msgid "Enjoy your break!\nCoins: %d"
+msgstr "بالصحة والراحة!\nالفلوس: %d"
+
+msgid "Choose something from the cafe menu."
+msgstr "ختار شي حاجة من مينو القهوة."
+
 msgid "To the douar"
 msgstr "لساحة الدوار"
 
