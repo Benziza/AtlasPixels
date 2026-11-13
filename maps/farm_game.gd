@@ -41,6 +41,10 @@ var cooldown := 0.0
 var toast_seconds := 0.0
 var autosave_seconds := 0.0
 var target := Vector2i(-1, -1)
+var target_reachable := false
+var feedback_target := Vector2i(-1, -1)
+var feedback_reachable := false
+var feedback_flash := 0.0
 var daylight: CanvasModulate
 var action_flash := 0.0
 var flash_cell := Vector2i.ZERO
@@ -319,10 +323,12 @@ func _process(delta: float) -> void:
 			save_progress()
 			autosave_seconds = 0
 		target = aimed_cell()
+		# Share this frame's reach check between the hint and the outline.
+		target_reachable = current_area == "farm" and state.beds.has(target) and can_reach(target)
 		hud.set_context(context_hint(), player.get_global_transform_with_canvas().origin)
 	else:
 		hud.set_context(tr("Paused") if inactive else "", player.get_global_transform_with_canvas().origin)
-	feedback.queue_redraw()
+	update_feedback()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if transitioning or inactive:
@@ -543,7 +549,7 @@ func context_hint() -> String:
 	if near_marker("bakery", 58):
 		return tr("E  /  Bakery")
 	if current_area == "farm" and state.beds.has(target):
-		return state.describe(target) if can_reach(target) else tr("Walk closer to this bed")
+		return state.describe(target) if target_reachable else tr("Walk closer to this bed")
 	if water_nearby():
 		return tr("E  /  Refill your watering can")
 	return ""
@@ -687,13 +693,23 @@ func end_day(forced: bool) -> void:
 	refresh_hud()
 	show_toast((tr("02:00 - time to rest. ") if forced else "") + tr("Day %d: %d crops grew; %d waited for water.") % [state.day, summary.grown, summary.missed], 7)
 
-func draw_feedback() -> void:
-	if not is_instance_valid(player) or paused or inactive or transitioning or current_area != "farm":
+func update_feedback() -> void:
+	feedback.visible = not (paused or inactive or transitioning) and current_area == "farm"
+	if not feedback.visible:
 		return
-	if state.beds.has(target):
-		var color := Color("f6e2a0") if can_reach(target) else Color("dc8168")
-		feedback.draw_rect(Rect2(Vector2(target * TILE) + Vector2(1, 1), Vector2(30, 30)), Color(color, 0.12), true)
-		feedback.draw_rect(Rect2(Vector2(target * TILE) + Vector2(1, 1), Vector2(30, 30)), color, false, 2)
+	var cell := target if state.beds.has(target) else Vector2i(-1, -1)
+	if cell != feedback_target or target_reachable != feedback_reachable or action_flash != feedback_flash:
+		feedback_target = cell
+		feedback_reachable = target_reachable
+		feedback_flash = action_flash
+		# CanvasItem retains the outline until it changes. A final zero clears the flash.
+		feedback.queue_redraw()
+
+func draw_feedback() -> void:
+	if feedback_target != Vector2i(-1, -1):
+		var color := Color("f6e2a0") if feedback_reachable else Color("dc8168")
+		feedback.draw_rect(Rect2(Vector2(feedback_target * TILE) + Vector2(1, 1), Vector2(30, 30)), Color(color, 0.12), true)
+		feedback.draw_rect(Rect2(Vector2(feedback_target * TILE) + Vector2(1, 1), Vector2(30, 30)), color, false, 2)
 	if action_flash > 0:
 		var center := Vector2(flash_cell * TILE) + Vector2(16, 16)
 		for i in 4:
