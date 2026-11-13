@@ -30,6 +30,8 @@ var font: FontFile
 var atlas: Texture2D
 var cached_selection := -1
 var toolbar_at_top := false
+var hint_width := -1.0
+var toast_layout_dirty := true
 
 class DarijaTooltip extends Label:
 	func _init(message: String) -> void:
@@ -44,7 +46,11 @@ class ToolButton extends Button:
 		return DarijaTooltip.new(for_text)
 
 class WaterGauge extends Control:
-	var value := 40.0
+	var value := 40.0:
+		set(next):
+			if value != next:
+				value = next
+				queue_redraw()
 	func _draw() -> void:
 		draw_rect(Rect2(Vector2.ZERO, size), Color("78432a"))
 		draw_rect(Rect2(Vector2(2, 2), size - Vector2(4, 4)), Color("a77649"))
@@ -70,8 +76,16 @@ class PixelFrame extends Control:
 				draw_rect(Rect2(p, Vector2(4, 4)), Color("ffe9aa"))
 
 class DayDial extends Control:
-	var minute := 360
-	var paused := false
+	var minute := 360:
+		set(next):
+			if minute != next:
+				minute = next
+				queue_redraw()
+	var paused := false:
+		set(next):
+			if paused != next:
+				paused = next
+				queue_redraw()
 	func _draw() -> void:
 		var night := minute >= 19 * 60
 		var center := Vector2(44, 44)
@@ -224,6 +238,8 @@ func _ready() -> void:
 	hint_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint_panel.visible = false
 	hint_label = place_label(hint_panel, "", Rect2(14, 6, 272, 30), 20)
+	hint_label.theme_changed.connect(invalidate_hint_width)
+	font.changed.connect(invalidate_hint_width)
 	toast_panel = frame(screen, Rect2(0, 0, 660, 54))
 	anchor_rect(toast_panel, Control.PRESET_CENTER_TOP, Rect2(-330, 18, 660, 54))
 	toast_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -231,6 +247,7 @@ func _ready() -> void:
 	toast_label = place_label(toast_panel, "", Rect2(14, 10, 632, 34), 22)
 	toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	toast_label.minimum_size_changed.connect(func(): toast_layout_dirty = true)
 	day_fade = ColorRect.new()
 	day_fade.layout_direction = Control.LAYOUT_DIRECTION_LTR
 	day_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -323,12 +340,16 @@ func build_toolbar() -> void:
 
 func _process(_delta: float) -> void:
 	toast_panel.visible = not toast_label.text.is_empty() and not is_instance_valid(modal)
-	if toast_panel.visible:
+	if toast_panel.visible and toast_layout_dirty:
+		toast_layout_dirty = false
 		var height := maxf(54, toast_label.get_minimum_size().y + 24)
 		toast_panel.size.y = height
 		toast_label.size.y = height - 20
 	if is_instance_valid(modal):
 		hint_panel.visible = false
+
+func invalidate_hint_width() -> void:
+	hint_width = -1.0
 
 func set_context(text: String, screen_point: Vector2) -> void:
 	var should_move := screen_point.y > screen.size.y - 140 and absf(screen_point.x - screen.size.x / 2) < BAR_WIDTH / 2 + 40
@@ -336,15 +357,19 @@ func set_context(text: String, screen_point: Vector2) -> void:
 		toolbar_at_top = should_move
 		anchor_rect(toolbar, Control.PRESET_CENTER_TOP if toolbar_at_top else Control.PRESET_CENTER_BOTTOM, Rect2(-BAR_WIDTH / 2, 18 if toolbar_at_top else -96, BAR_WIDTH, 80))
 		anchor_rect(toast_panel, Control.PRESET_CENTER_TOP, Rect2(-330, 110 if toolbar_at_top else 18, 660, toast_panel.size.y))
-	hint_label.text = text
+	if hint_label.text != text:
+		hint_label.text = text
+		invalidate_hint_width()
 	hint_panel.visible = not text.is_empty() and not is_instance_valid(modal)
 	if not hint_panel.visible:
 		return
-	var width := minf(620, font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x + 30)
-	hint_panel.size = Vector2(width, 42)
-	hint_label.size = Vector2(width - 28, 30)
+	if hint_width < 0:
+		var hint_font := hint_label.get_theme_font("font")
+		hint_width = minf(620, hint_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, hint_label.get_theme_font_size("font_size")).x + 30)
+		hint_panel.size = Vector2(hint_width, 42)
+		hint_label.size = Vector2(hint_width - 28, 30)
 	var viewport_size := screen.size
-	hint_panel.position = Vector2(clampf(screen_point.x - width / 2, 12, viewport_size.x - width - 12), clampf(screen_point.y + 38, 12, viewport_size.y - 148)).round()
+	hint_panel.position = Vector2(clampf(screen_point.x - hint_width / 2, 12, viewport_size.x - hint_width - 12), clampf(screen_point.y + 38, 12, viewport_size.y - 148)).round()
 
 func refresh(state: RefCounted, paused: bool) -> void:
 	var hour: int = (state.minute / 60) % 24
@@ -357,11 +382,9 @@ func refresh(state: RefCounted, paused: bool) -> void:
 	date_label.text = tr("%s. %d") % [weekdays[(state.day - 1) % 7], state.day]
 	money_label.text = str(state.coins)
 	water_meter.value = state.water
-	water_meter.queue_redraw()
 	water_label.text = "%d/40" % state.water
 	dial.minute = state.minute
 	dial.paused = paused
-	dial.queue_redraw()
 	period_icon.modulate = Color("949ebd") if state.minute >= 19 * 60 else Color.WHITE
 	counts[0].text = str(state.inventory.mint_seed)
 	counts[1].text = str(state.inventory.tomato_seed)
