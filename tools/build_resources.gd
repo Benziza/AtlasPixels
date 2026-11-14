@@ -353,14 +353,11 @@ func build_map() -> void:
 		stamp("Props", "fence_vertical", 29, y)
 	for x in [32, 34]:
 		stamp("Props", "fence_horizontal", x, 23)
-	for p in [Vector2i(4, 9), Vector2i(12, 9), Vector2i(23, 8), Vector2i(30, 8), Vector2i(33, 11)]:
+	for p in [Vector2i(23, 8), Vector2i(30, 8), Vector2i(33, 11)]:
 		stamp("Props", "terracotta_jar", p.x, p.y)
-	for p in [Vector2i(11, 10), Vector2i(29, 9)]:
-		stamp("Props", "chest", p.x, p.y)
-	for p in [Vector2i(5, 10), Vector2i(8, 11), Vector2i(4, 23)]:
-		stamp("Props", "mint_basket", p.x, p.y)
-	for p in [Vector2i(6, 10), Vector2i(9, 11), Vector2i(25, 25)]:
-		stamp("Props", "tomato_crate", p.x, p.y)
+	stamp("Props", "chest", 29, 9)
+	stamp("Props", "mint_basket", 4, 23)
+	stamp("Props", "tomato_crate", 25, 25)
 	for p in [Vector2i(3, 12), Vector2i(15, 15), Vector2i(28, 13), Vector2i(34, 25), Vector2i(21, 4), Vector2i(11, 26)]:
 		stamp("Props", "rocks", p.x, p.y)
 	# A few additional obstacles, outside the three bridge approaches.

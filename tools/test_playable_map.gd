@@ -92,7 +92,8 @@ func run_tests() -> void:
 	expect(player != null, "Player missing from default main scene")
 	expect(farm.get_node("DepthSort").y_sort_enabled, "Depth sorting disabled")
 	expect(can_stand(player.global_position), "Spawn overlaps an obstacle")
-	expect(get_nodes_in_group("obstacles").size() >= 80, "Missing scene obstacles")
+	for point in [Vector2(144, 318), Vector2(400, 318), Vector2(176, 349), Vector2(208, 350), Vector2(368, 350), Vector2(272, 381), Vector2(304, 382)]:
+		expect(can_stand(point), "The hanout approach is blocked at " + str(point))
 	var sprite := player.get_node("Visual/Sprite") as AnimatedSprite2D
 
 	await teleport(Vector2(800, 400))
