@@ -47,7 +47,7 @@ func test_catalog() -> void:
 	# Cover literal tr() calls as well as the dynamically translated crop names.
 	var calls := RegEx.new()
 	calls.compile('tr\\("((?:[^"\\\\]|\\\\.)*)"\\)')
-	for path in ["res://maps/farm_state.gd", "res://maps/farm_game.gd", "res://maps/farm_hud.gd", "res://maps/douar_square.gd", "res://maps/cafe_interior.gd", "res://maps/route_sign.gd", "res://maps/civic_quarter.gd", "res://maps/civic_interior.gd"]:
+	for path in ["res://maps/farm_state.gd", "res://maps/farm_game.gd", "res://maps/farm_hud.gd", "res://maps/douar_square.gd", "res://maps/cafe_interior.gd", "res://maps/route_sign.gd", "res://maps/civic_quarter.gd", "res://maps/civic_interior.gd", "res://maps/hanout_interior.gd"]:
 		for call in calls.search_all(FileAccess.get_file_as_string(path)):
 			var message: String = JSON.parse_string('"' + call.get_string(1) + '"')
 			expect(not catalog.get_message(message).is_empty(), "Untranslated runtime message: " + message)
@@ -103,12 +103,23 @@ func test_scene() -> void:
 	expect(game.hud.modal_detail.text.contains("كتتسجل بوحدها"), "Pause help is not in Darija")
 	check_controls(game.hud.screen)
 	game.close_menu()
-	game.open_shop()
+	game.activate_area("hanout", Vector2(520, 398))
+	game.interact()
+	await settle()
+	expect(game.hud.modal_detail.text.contains("واش بغيتي تشري الزريعة"), "Shopkeeper dialogue is not in Darija")
+	check_controls(game.hud.screen)
+	game.menu_action("shop_buy")
+	await settle()
+	check_controls(game.hud.screen)
 	game.menu_action("buy_mint")
 	await settle()
 	expect(game.state.coins == 75 and game.hud.modal_detail.text.contains("تزادت الزريعة"), "Localized shop purchase failed")
 	check_controls(game.hud.screen)
+	game.menu_action("shop_sell")
+	await settle()
+	check_controls(game.hud.screen)
 	game.close_menu()
+	game.activate_area("farm", game.get_node("PlayerSpawn").position)
 	game.open_sleep()
 	await settle()
 	expect(game.hud.modal_detail.text.contains("باقي خاصو الما"), "Sleep warning is not in Darija")

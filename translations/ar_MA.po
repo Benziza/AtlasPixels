@@ -103,8 +103,14 @@ msgstr "تعمرات الرشاشة: ⁦40 / 40⁩"
 msgid "E  /  Sleep until tomorrow"
 msgstr "⁦E⁩ / نعس حتى لغدا"
 
-msgid "E  /  Hanout: seeds and harvest"
-msgstr "⁦E⁩ / الحانوت: الزريعة والمحصول"
+msgid "E  /  Enter the hanout"
+msgstr "⁦E⁩ / دخل للحانوت"
+
+msgid "E  /  Talk to the shopkeeper"
+msgstr "⁦E⁩ / هضر مع مول الحانوت"
+
+msgid "Talk to the shopkeeper at the checkout."
+msgstr "قرب للكاسة وهضر مع مول الحانوت."
 
 msgid "Walk closer to this bed"
 msgstr "قرب شوية لهاد الحوض"
@@ -145,17 +151,41 @@ msgstr "كمل الخدمة"
 msgid "The hanout"
 msgstr "الحانوت"
 
+msgid "The shopkeeper"
+msgstr "مول الحانوت"
+
+msgid "The shopkeeper back print"
+msgstr "مول\nالحانوت"
+
+msgid "Hello! Would you like to buy seeds or sell your harvest?"
+msgstr "السلام، مرحبا! واش بغيتي تشري الزريعة ولا تبيع المحصول؟"
+
+msgid "Buy seeds"
+msgstr "نشري الزريعة"
+
+msgid "Sell harvest"
+msgstr "نبيع المحصول"
+
+msgid "See you later"
+msgstr "نشوفك من بعد"
+
 msgid "5 mint seeds  /  25 coins"
 msgstr "زريعة النعناع: 5 بـ 25"
 
 msgid "5 tomato seeds  /  50 coins"
 msgstr "زريعة مطيشة: 5 بـ 50"
 
-msgid "Sell harvest  /  Mint 15, Tomato 35"
-msgstr "بيع المحصول / النعناع 15، مطيشة 35"
+msgid "Sell all mint  /  %d each"
+msgstr "بيع النعناع كامل / %d للوحدة"
 
-msgid "Back to the farm"
-msgstr "رجع للفيرمة"
+msgid "Sell all tomatoes  /  %d each"
+msgstr "بيع مطيشة كاملة / %d للوحدة"
+
+msgid "Sell all harvest"
+msgstr "بيع المحصول كامل"
+
+msgid "Back"
+msgstr "رجوع"
 
 msgid "Coins: %d\nBasket: %d mint / %d tomatoes\nSeeds: %d mint / %d tomato"
 msgstr "الفلوس: %d\nالقفة: %d نعناع / %d مطيشة\nالزريعة: %d نعناع / %d مطيشة"
@@ -185,7 +215,7 @@ msgid "Seeds added to your bag."
 msgstr "تزادت الزريعة فالقفة ديالك."
 
 msgid "Sold for %d coins."
-msgstr "تبع المحصول بـ %d قطعة."
+msgstr "بعتي المحصول بـ %d قطعة."
 
 msgid "Your basket is empty."
 msgstr "القفة ديالك خاوية."

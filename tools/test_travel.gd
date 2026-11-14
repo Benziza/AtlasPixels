@@ -64,14 +64,6 @@ func run_tests() -> void:
 	await settle(15)
 	game.state.selected_tool = 2
 	expect(game.use_tool(Vector2i(16, 9)), "Could not water before travel")
-	# Seeds remain available at the farm's hanout after the village shop renovation.
-	game.player.position = game.markers.hanout + Vector2(0, 20)
-	await settle(15)
-	game.interact()
-	expect(game.paused and is_instance_valid(game.hud.modal), "Farm hanout did not open")
-	game.menu_action("buy_mint")
-	expect(game.state.coins == 75 and game.state.inventory.mint_seed == 18, "Farm shop purchase failed")
-	game.close_menu()
 	var to_douar: StaticBody2D = game.get_node("DepthSort/ToDouar")
 	expect(to_douar.get_node("Name").text == "ساحة الدوار" and not to_douar.get_node("Artwork").flip_h, "Farm sign is not localized or points away from the douar")
 	expect(not can_stand(to_douar.position + Vector2(0, 8)), "Farm sign post has no collision")
@@ -107,9 +99,10 @@ func run_tests() -> void:
 	game.player.position = game.square_markers.bakery + Vector2(0, 20)
 	await settle(15)
 	expect(game.context_hint() == tr("E  /  Bakery"), "Bakery hint still advertises the old hanout")
+	var coins_before_bakery: int = game.state.coins
 	game.interact()
 	expect(not game.paused and game.hud.toast_label.text == tr("Fresh khobz is baked here every morning."), "Bakery interaction opens the old seed shop")
-	expect(game.state.coins == 75 and game.state.inventory.mint_seed == seed_count, "Bakery greeting changed the shared inventory")
+	expect(game.state.coins == coins_before_bakery and game.state.inventory.mint_seed == seed_count, "Bakery greeting changed the shared inventory")
 	# Save beyond the old 1024px square boundary, then reload the actual file.
 	game.player.position = Vector2(1200, 512)
 	expect(game.save_progress(), "Square progress could not be saved")
@@ -162,9 +155,23 @@ func run_tests() -> void:
 	game = make_game()
 	await settle(6)
 	expect(game.current_area == "douar" and game.player.position == Layout.SQUARE_SPAWN, "Blocked bakery save did not recover at the square entrance")
+	# The shop uses the same save as the farm, including the spawn's collision checks.
+	game.activate_area("hanout", Vector2(520, 398))
+	expect(game.save_progress(), "Hanout progress could not be saved")
+	game.queue_free()
+	await settle()
+	game = make_game()
+	await settle(6)
+	expect(game.current_area == "hanout" and game.player.position == Vector2(520, 398), "Reload did not resume inside the hanout")
+	expect(game.state.inventory == saved.inventory and game.state.coins == saved.coins, "Hanout reload lost the inventory or money")
 	var invalid: Dictionary = game.state.to_data().duplicate(true)
 	var validator := FarmState.new()
 	validator.initialize(game.initial_beds)
+	invalid.version = 5
+	expect(not validator.restore(invalid), "A pre-hanout save accepted a shop location")
+	invalid.version = FarmState.SAVE_VERSION
+	invalid.player = [900, 500]
+	expect(not validator.restore(invalid), "Hanout accepted an out-of-bounds save")
 	invalid.area = "unknown"
 	expect(not validator.restore(invalid), "Unknown area was accepted")
 	invalid.area = "douar"
@@ -174,7 +181,7 @@ func run_tests() -> void:
 	invalid.erase("area")
 	expect(not validator.restore(invalid), "Version-2 save without an area was accepted")
 	game.menu_action("new_farm")
-	expect(game.current_area == "farm" and game.state.day == 1 and game.state.coins == 100, "New farm did not leave the square cleanly")
+	expect(game.current_area == "farm" and game.state.day == 1 and game.state.coins == 100, "New farm did not leave the hanout cleanly")
 	game.queue_free()
 	await settle()
 	print("Travel: %d checks, %d failures." % [checks, failures.size()])

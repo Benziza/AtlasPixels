@@ -403,11 +403,12 @@ func refresh(state: RefCounted, paused: bool) -> void:
 
 func close_modal() -> void:
 	if is_instance_valid(modal):
+		modal.hide()
 		modal.queue_free()
 	modal = null
 	modal_detail = null
 
-func show_modal(title: String, detail: String, actions: Array) -> void:
+func show_modal(title: String, detail: String, actions: Array, beside_checkout: bool = false) -> void:
 	close_modal()
 	modal = Control.new()
 	modal.layout_direction = Control.LAYOUT_DIRECTION_LTR
@@ -415,15 +416,26 @@ func show_modal(title: String, detail: String, actions: Array) -> void:
 	screen.add_child(modal)
 	var shade := ColorRect.new()
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.08, 0.07, 0.04, 0.62)
+	shade.color = Color(0.08, 0.07, 0.04, 0.22 if beside_checkout else 0.62)
 	modal.add_child(shade)
-	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	modal.add_child(center)
+	var placement: Container
+	if beside_checkout:
+		var side := VBoxContainer.new()
+		side.alignment = BoxContainer.ALIGNMENT_END
+		placement = side
+	else:
+		placement = CenterContainer.new()
+	placement.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	if beside_checkout:
+		placement.anchor_right = 0.0
+		placement.offset_left = 32
+		placement.offset_right = 552
+		placement.offset_bottom = -106
+	modal.add_child(placement)
 	var card := PanelContainer.new()
 	card.custom_minimum_size.x = 520
 	card.add_theme_stylebox_override("panel", flat(PAPER, WOOD, 6))
-	center.add_child(card)
+	placement.add_child(card)
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 14)
 	card.add_child(content)

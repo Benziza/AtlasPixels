@@ -8,6 +8,9 @@ const FARM_EXIT := Rect2(1488, 352, 48, 96)
 const SQUARE_EXIT := Rect2(0, 448, 48, 96)
 const SQUARE_SPAWN := Vector2(112, 496)
 const FARM_RETURN := Vector2(1440, 416)
+const HANOUT_SIZE := Vector2i(640, 448)
+const HANOUT_SPAWN := Vector2(320, 396)
+const HANOUT_EXIT := Rect2(288, 420, 64, 28)
 const CAFE_SIZE := Vector2i(640, 448)
 const CAFE_SPAWN := Vector2(320, 384)
 const CAFE_EXIT := Rect2(288, 420, 64, 28)
@@ -26,12 +29,13 @@ const CAIDAT_RETURN := Vector2(272, 432)
 const HOSPITAL_RETURN := Vector2(752, 432)
 
 static func is_interior(area: String) -> bool:
-	return area in ["cafe", "caidat", "hospital"]
+	return area in ["hanout", "cafe", "caidat", "hospital"]
 
 static func area_size(area: String) -> Vector2i:
 	match area:
 		"farm": return FARM_SIZE
 		"douar": return SQUARE_SIZE
+		"hanout": return HANOUT_SIZE
 		"cafe": return CAFE_SIZE
 		"civic": return CIVIC_SIZE
 		"caidat", "hospital": return CIVIC_INTERIOR_SIZE
