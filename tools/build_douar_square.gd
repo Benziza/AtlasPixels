@@ -180,13 +180,7 @@ func build() -> void:
 	var tree_cells := [Vector2i(-1, -3), Vector2i(3, -3), Vector2i(13, -3), Vector2i(32, -3), Vector2i(36, -3), Vector2i(-2, 3), Vector2i(35, 3), Vector2i(37, 9), Vector2i(-2, 10), Vector2i(11, 15), Vector2i(24, 15), Vector2i(35, 20)]
 	for i in tree_cells.size():
 		prop("Tree%d" % i, "olive_tree" if i % 2 == 0 else "fig_tree", tree_cells[i])
-	for cell in [Vector2i(4, 9), Vector2i(5, 9), Vector2i(10, 9), Vector2i(16, 9), Vector2i(24, 8), Vector2i(35, 9), Vector2i(9, 22), Vector2i(26, 22)]:
-		prop("Jar%d_%d" % [cell.x, cell.y], "terracotta_jar", cell)
-	for cell in [Vector2i(6, 9), Vector2i(11, 9)]:
-		prop("Basket%d" % cell.x, "mint_basket", cell)
-	prop("TomatoCrate", "tomato_crate", Vector2i(12, 9))
-	prop("Chest", "chest", Vector2i(9, 9))
-	for cell in [Vector2i(13, 9), Vector2i(23, 9), Vector2i(14, 20), Vector2i(16, 21), Vector2i(25, 20), Vector2i(34, 19)]:
+	for cell in [Vector2i(14, 20), Vector2i(16, 21), Vector2i(25, 20), Vector2i(34, 19)]:
 		prop("Hedge%d_%d" % [cell.x, cell.y], "flowering_hedge", cell, false)
 	for cell in [Vector2i(5, 12), Vector2i(17, 4), Vector2i(16, 8), Vector2i(24, 5), Vector2i(33, 7), Vector2i(10, 17), Vector2i(27, 19)]:
 		prop("Flowers%d_%d" % [cell.x, cell.y], "wildflowers", cell, false)
