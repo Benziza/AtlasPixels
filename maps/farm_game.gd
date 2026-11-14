@@ -4,6 +4,7 @@ const FarmState = preload("res://maps/farm_state.gd")
 const FarmHUD = preload("res://maps/farm_hud.gd")
 const Layout = preload("res://maps/world_layout.gd")
 const Square = preload("res://maps/douar_square.tscn")
+const Hanout = preload("res://maps/hanout_interior.tscn")
 const Cafe = preload("res://maps/cafe_interior.tscn")
 const Civic = preload("res://maps/civic_quarter.tscn")
 const CaidatInterior = preload("res://maps/caidat_interior.tscn")
@@ -24,6 +25,7 @@ var feedback: Node2D
 var player: CharacterBody2D
 var camera: Camera2D
 var square: Node2D
+var hanout: Node2D
 var cafe: Node2D
 var civic: Node2D
 var civic_interiors: Dictionary = {}
@@ -66,6 +68,10 @@ func _ready() -> void:
 	square.visible = false
 	square.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(square)
+	hanout = Hanout.instantiate()
+	hanout.visible = false
+	hanout.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(hanout)
 	cafe = Cafe.instantiate()
 	cafe.visible = false
 	cafe.process_mode = Node.PROCESS_MODE_DISABLED
@@ -146,6 +152,8 @@ func activate_area(area: String, point: Vector2) -> void:
 	var parent: Node2D = $DepthSort
 	if area == "douar":
 		parent = square.get_node("DepthSort")
+	elif area == "hanout":
+		parent = hanout.get_node("DepthSort")
 	elif area == "cafe":
 		parent = cafe.get_node("DepthSort")
 	elif area == "civic":
@@ -157,7 +165,7 @@ func activate_area(area: String, point: Vector2) -> void:
 	for node in [$Terrain, $DepthSort, $MapBoundary, $SaqyaBanks, $FarmExtension]:
 		node.visible = on_farm
 		node.process_mode = Node.PROCESS_MODE_INHERIT if on_farm else Node.PROCESS_MODE_DISABLED
-	for entry: Array in [[square, "douar"], [cafe, "cafe"], [civic, "civic"]]:
+	for entry: Array in [[square, "douar"], [hanout, "hanout"], [cafe, "cafe"], [civic, "civic"]]:
 		entry[0].visible = area == entry[1]
 		entry[0].process_mode = Node.PROCESS_MODE_INHERIT if area == entry[1] else Node.PROCESS_MODE_DISABLED
 	for name_: String in civic_interiors:
@@ -181,6 +189,7 @@ func activate_area(area: String, point: Vector2) -> void:
 
 func area_spawn() -> Vector2:
 	match current_area:
+		"hanout": return Layout.HANOUT_SPAWN
 		"cafe": return Layout.CAFE_SPAWN
 		"civic": return Layout.CIVIC_SPAWN
 		"caidat", "hospital": return Layout.CIVIC_INTERIOR_SPAWN
@@ -192,6 +201,8 @@ func _physics_process(_delta: float) -> void:
 		return
 	if current_area == "farm" and Layout.FARM_EXIT.has_point(player.position):
 		begin_travel("douar")
+	elif current_area == "hanout" and Layout.HANOUT_EXIT.has_point(player.position):
+		begin_travel("farm")
 	elif current_area == "douar" and Layout.SQUARE_EXIT.has_point(player.position):
 		begin_travel("farm")
 	elif current_area == "douar" and Layout.SQUARE_NORTH_EXIT.has_point(player.position):
@@ -219,6 +230,8 @@ func travel_to(area: String) -> void:
 	await fade.finished
 	var destination := Layout.FARM_RETURN
 	var message := tr("Back on your farm.")
+	if area == "farm" and previous_area == "hanout":
+		destination = markers.hanout + Vector2(0, 24)
 	if area == "douar":
 		destination = Layout.CAFE_RETURN if previous_area == "cafe" else Layout.SQUARE_SPAWN
 		if previous_area == "civic":
@@ -240,6 +253,9 @@ func travel_to(area: String) -> void:
 	elif area == "cafe":
 		destination = Layout.CAFE_SPAWN
 		message = tr("Welcome to the cafe. Order at the counter, or relax by the tables.")
+	elif area == "hanout":
+		destination = Layout.HANOUT_SPAWN
+		message = tr("Talk to the shopkeeper at the checkout.")
 	activate_area(area, destination)
 	show_toast(message, 5)
 	var dawn := create_tween()
@@ -309,6 +325,8 @@ func _process(delta: float) -> void:
 	if toast_seconds == 0:
 		hud.toast_label.text = ""
 	player.controls_enabled = not (paused or inactive or transitioning)
+	if current_area == "hanout":
+		hanout.face_customer(hanout.can_talk(player.position))
 	if player.controls_enabled:
 		var old_minute: int = state.minute
 		if state.advance_time(delta):
@@ -467,6 +485,12 @@ func water_nearby() -> bool:
 func interact() -> void:
 	if paused or inactive or transitioning or cooldown > 0:
 		return
+	if current_area == "hanout":
+		if hanout.can_talk(player.position):
+			open_shop()
+		else:
+			show_toast(tr("Talk to the shopkeeper at the checkout."), 5)
+		return
 	if civic_interiors.has(current_area):
 		var spot: Dictionary = civic_interiors[current_area].near_interaction(player.position)
 		show_toast(spot.message if not spot.is_empty() else tr("The exit is at the bottom of the room."), 5)
@@ -483,7 +507,7 @@ func interact() -> void:
 	elif near_marker("farmhouse", 64):
 		open_sleep()
 	elif near_marker("hanout", 58):
-		open_shop()
+		begin_travel("hanout")
 	elif near_marker("bakery", 58):
 		show_toast(tr("Fresh khobz is baked here every morning."), 5)
 	elif near_marker("caidat", 58):
@@ -515,6 +539,12 @@ func refill_can() -> void:
 	save_progress()
 
 func context_hint() -> String:
+	if current_area == "hanout":
+		if hanout.can_talk(player.position):
+			return tr("E  /  Talk to the shopkeeper")
+		if player.position.y >= 377 and absf(player.position.x - Layout.HANOUT_SPAWN.x) < 64:
+			return tr("Walk through the door to return outside.")
+		return ""
 	if civic_interiors.has(current_area):
 		var spot: Dictionary = civic_interiors[current_area].near_interaction(player.position)
 		if not spot.is_empty():
@@ -545,7 +575,7 @@ func context_hint() -> String:
 	if near_marker("farmhouse", 64):
 		return tr("E  /  Sleep until tomorrow")
 	if near_marker("hanout", 58):
-		return tr("E  /  Hanout: seeds and harvest")
+		return tr("E  /  Enter the hanout")
 	if near_marker("bakery", 58):
 		return tr("E  /  Bakery")
 	if current_area == "farm" and state.beds.has(target):
@@ -619,7 +649,33 @@ func open_sleep() -> void:
 
 func open_shop() -> void:
 	set_paused(true)
-	hud.show_modal(tr("The hanout"), shop_text(), [[tr("5 mint seeds  /  25 coins"), "buy_mint"], [tr("5 tomato seeds  /  50 coins"), "buy_tomato"], [tr("Sell harvest  /  Mint 15, Tomato 35"), "sell"], [tr("Back to the farm"), "close"]])
+	show_shop_menu(tr("The shopkeeper"), tr("Hello! Would you like to buy seeds or sell your harvest?"), [
+		[tr("Buy seeds"), "shop_buy"],
+		[tr("Sell harvest"), "shop_sell"],
+		[tr("See you later"), "close"],
+	])
+
+func show_shop_menu(title: String, detail: String, actions: Array) -> void:
+	hud.show_modal(title, detail, actions, true)
+	hud.modal.set_meta("hanout_trade", true)
+
+func show_shop_catalog(buying: bool) -> void:
+	if buying:
+		show_shop_menu(tr("Buy seeds"), shop_text(), [
+			[tr("5 mint seeds  /  25 coins"), "buy_mint"],
+			[tr("5 tomato seeds  /  50 coins"), "buy_tomato"],
+			[tr("Back"), "shop_back"],
+		])
+	else:
+		show_shop_menu(tr("Sell harvest"), shop_text(), [
+			[tr("Sell all mint  /  %d each") % FarmState.CROPS.mint.price, "sell_mint"],
+			[tr("Sell all tomatoes  /  %d each") % FarmState.CROPS.tomato.price, "sell_tomato"],
+			[tr("Sell all harvest"), "sell"],
+			[tr("Back"), "shop_back"],
+		])
+
+func can_trade() -> bool:
+	return current_area == "hanout" and paused and not inactive and is_instance_valid(hud.modal) and hud.modal.has_meta("hanout_trade") and hanout.can_talk(player.position)
 
 func shop_text() -> String:
 	return tr("Coins: %d\nBasket: %d mint / %d tomatoes\nSeeds: %d mint / %d tomato") % [state.coins, state.inventory.mint, state.inventory.tomato, state.inventory.mint_seed, state.inventory.tomato_seed]
@@ -651,13 +707,24 @@ func menu_action(action: String) -> void:
 			refresh_all()
 			save_progress()
 			show_toast(tr("A fresh start! Plant your first seeds in the empty nursery."), 6)
+		"shop_buy", "shop_sell":
+			if can_trade():
+				show_shop_catalog(action == "shop_buy")
+		"shop_back":
+			if can_trade():
+				open_shop()
 		"buy_mint", "buy_tomato":
+			if not can_trade():
+				return
 			var error: String = state.buy_seeds(action.trim_prefix("buy_"))
 			hud.modal_detail.text = shop_text() + "\n" + (tr("Seeds added to your bag.") if error.is_empty() else error)
 			refresh_hud()
 			save_progress()
-		"sell":
-			var earned: int = state.sell_harvest()
+		"sell", "sell_mint", "sell_tomato":
+			if not can_trade():
+				return
+			var crop := "" if action == "sell" else action.trim_prefix("sell_")
+			var earned: int = state.sell_harvest(crop)
 			hud.modal_detail.text = shop_text() + "\n" + (tr("Sold for %d coins.") % earned if earned > 0 else tr("Your basket is empty."))
 			refresh_hud()
 			save_progress()

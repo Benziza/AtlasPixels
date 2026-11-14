@@ -103,7 +103,7 @@ func run_tests() -> void:
 	var hud: CanvasLayer = game.hud
 	hud.set_context("E", Vector2(500, 400))
 	var short_width: float = hud.hint_panel.size.x
-	hud.set_context(tr("E  /  Hanout: seeds and harvest"), Vector2(500, 400))
+	hud.set_context(tr("E  /  Talk to the shopkeeper"), Vector2(500, 400))
 	expect(hud.hint_panel.size.x > short_width, "Changed hint text kept its old width")
 	hud.set_context("E", Vector2(500, 400))
 	hud.hint_label.add_theme_font_size_override("font_size", 30)
